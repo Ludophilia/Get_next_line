@@ -6,7 +6,8 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:16:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/02 18:16:34 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/02 18:22:12 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "get_next_line.h"
