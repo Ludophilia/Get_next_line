@@ -6,27 +6,21 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2022/12/26 20:48:42 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/03 21:26:40 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME 		= libft.a
+NAME 		= a.out
 
-CC 			= gcc
+CC 			= cc
 CCFL 		= -Wall -Wextra -Werror
 
 INCDIR 		= .
-LIB 		= ft
-LIBDIR 		= .
 
-CM 			= $(wildcard ft_[abcimpst]*.c)
+BFSZ		= ${BSIZE}
+
+CM 			= get_next_line.c
 OBM 		= $(CM:.c=.o)
-CB 			= $(wildcard ft*_bonus.c)
-OBB 		= $(CB:.c=.o)
-
-AR 			= ar
-ARFLM 		= -rcs
-ARFLB 		= -rcs
 
 UNAME 		= $(shell uname -s)
 ifeq 		($(UNAME), Linux)
@@ -35,30 +29,23 @@ ifeq 		($(UNAME), Linux)
 endif
 
 all: 		$(NAME)
+			@./$<
 
 $(NAME): 	$(OBM)
-			$(AR) $(ARFLM) $@ $^
-bonus: 		$(OBB)
-			$(AR) $(ARFLB) $(NAME) $^
+			$(CC) $(CCFL) $^ -D BUFFER_SIZE=$(BFSZ) -o $@
 
 %.o: 		%.c
-			$(CC) $(CCFL) -I$(INCDIR) -c $< -o $@
+			@$(CC) $(CCFL) -I$(INCDIR) -c $< -o $@
 test_%: 	all
-			$(CC) $(CCFL) -I$(INCDIR) tests/$@.c -l$(LIB) -L$(LIBDIR) \
-			&& ./a.out
+			$(CC) $(CCFL) -I$(INCDIR) tests/$@.c -l$(LIB) -L$(LIBDIR)
+			./a.out
+m_test_%:	test_%
 			$(VG) $(VGFL) ./a.out
-			rm a.out
-
-so:
-			$(CC) $(CCFL) -fPIC -I$(INCDIR) -c $(CM) $(CB)
-			$(CC) $(CCFL) -shared -o libft.so $(OBM) $(OBB)
 
 re: 		fclean all
 fclean: 	clean
-			@-rm $(NAME)
+			rm -f $(NAME)
 clean:
-			@-rm $(OBM)
-			@-rm $(OBB)
-			@-rm $(wildcard *.so)
+			rm -f $(OBM)
 
-.PHONY: 	all bonus re fclean clean
+.PHONY: 	all re fclean clean
