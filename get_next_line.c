@@ -6,11 +6,12 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/04 19:28:57 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/05 14:48:51 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 int	ft_strchr(const char *s, int c)
 {
@@ -23,33 +24,24 @@ int	ft_strchr(const char *s, int c)
 	return (-1);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+ssize_t	fill_stash(int fd, char	**stash)
 {
-	char	*substr;
-	size_t	size;
-	size_t	slen;
-	size_t	i;
+	char		*old_stash;
+	ssize_t		bytesread;
+	char		*buffer;
 
-	if (s == (char *)0)
-		return ((char *)0);
-	size = 0;
-	slen = ft_strlen(s);
-	while (((start + size) < slen) && (size < len))
-		size++;
-	substr = malloc((size + 1) * sizeof(char));
-	if (!substr)
-		return ((char *)0);
-	i = 0;
-	while ((i < size) && ((start + i) < slen))
-	{
-		substr[i] = s[start + i];
-		i++;
-	}
-	substr[i] = '\x0';
-	return (substr);
+	buffer = calloc((BUFFER_SIZE + 1), sizeof(char));
+	if (!buffer || !*stash)
+		return (-1);
+	bytesread = read(fd, buffer, BUFFER_SIZE);
+	if (bytesread == -1)
+		return (-1);
+	old_stash = *stash;
+	*stash = ft_strjoin(old_stash, buffer);
+	free(old_stash);
+	free(buffer);
+	return (bytesread);
 }
-
-#include <stdio.h>
 
 // should work without BUFFER_SIZE size, maybe with an ifndef
 // Use read (WITH constant macro BUFFER_SIZE), malloc, free. static vars can 
@@ -62,46 +54,35 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 char	*get_next_line(int fd)
 {
 	static char		*stash;
-	char			*tmp_stash;
-	char			*buffer;
 	ssize_t			bytesread;
 
 	int				sep;
 	char			*line;
 	
-	// Now, what to do when there is no bytes to read ?
-		// good question (see below in main)
-
-	buffer = calloc((BUFFER_SIZE + 1), sizeof(char));
-	bytesread = read(fd, buffer, BUFFER_SIZE);
 	if (!stash)
-		stash = calloc(1, sizeof(char));
-	if (bytesread == -1 || !buffer || !stash)
+		stash = calloc(BUFFER_SIZE + 1, sizeof(char));
+	bytesread = fill_stash(fd, &stash);
+	if (bytesread == -1)
 		return ((char *)0);
-	while (bytesread > 0 && ft_strchr(buffer, '\n') == -1)
+	while (bytesread > 0 && ft_strchr(stash, '\n') == -1)
 	{
-		tmp_stash = stash; // pattern here
-		stash = ft_strjoin(tmp_stash, buffer);
-		free(tmp_stash);
-		ft_bzero(buffer, BUFFER_SIZE);
-		bytesread = read(fd, buffer, BUFFER_SIZE);
+		bytesread = fill_stash(fd, &stash);
+		if (bytesread == -1)
+			return ((char *)0);
 	}
-	tmp_stash = stash; // pattern here
-	stash = ft_strjoin(tmp_stash, buffer);
-	free(tmp_stash);
+	// Now, how this part should reacts when bytesread == 0 initially?
 	sep = ft_strchr(stash, '\n');
-	// printf("sep -> %i\n", sep);
 	if (sep != -1)
 	{
-		tmp_stash = stash; // pattern here
-		line = ft_substr(tmp_stash, 0, sep + 1);
-		stash = ft_substr(tmp_stash, sep + 1, ft_strlen(tmp_stash) - (sep + 1));
-		free(tmp_stash);
+		char *old_stash = stash; // pattern here
+		line = ft_substr(old_stash, 0, sep + 1);
+		stash = ft_substr(old_stash, sep + 1, ft_strlen(old_stash) - (sep + 1));
+		free(old_stash);
 	}
 	else
 		line = stash;
 	// printf("\tstash -> '%s'\n", stash);
-	free(buffer);
+	// Is the stash will ever be released ?
 	return (line);
 }
 
@@ -115,6 +96,6 @@ int	main(void)
 	printf("\tGNL -> '%s'\n", get_next_line(fd));
 
 	printf("\tGNL -> '%s'\n", get_next_line(fd));
-	printf("\tGNL -> '%s'\n", get_next_line(fd));
+	// printf("\tGNL -> '%s'\n", get_next_line(fd));
 	close(fd);
 }

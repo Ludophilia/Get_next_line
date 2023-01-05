@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:16:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/04 13:59:31 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/05 14:44:20 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,21 +22,46 @@ size_t	ft_strlen(const char *s)
 	return (i);
 }
 
-void	ft_bzero(void *s, size_t n)
+char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
-	while (n--)
-		*(char *)s++ = '\x0';
+	char	*substr;
+	size_t	size;
+	size_t	slen;
+	size_t	i;
+
+	if (s == (char *)0)
+		return ((char *)0);
+	size = 0;
+	slen = ft_strlen(s);
+	while (((start + size) < slen) && (size < len))
+		size++;
+	substr = malloc((size + 1) * sizeof(char));
+	if (!substr)
+		return ((char *)0);
+	i = 0;
+	while ((i < size) && ((start + i) < slen))
+	{
+		substr[i] = s[start + i];
+		i++;
+	}
+	substr[i] = '\x0';
+	return (substr);
 }
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {
+	size_t		total;
 	void		*arr;
+	void		*head;
 
-	if ((size != 0) && (nmemb != ((nmemb * size) / size)))
+	total = nmemb * size;
+	if ((size != 0) && (nmemb != (total / size)))
 		return ((void *)0);
-	arr = malloc(nmemb * size);
+	arr = malloc(total);
+	head = arr;
 	if (arr)
-		ft_bzero(arr, nmemb * size);
+		while (total--)
+			*(char *)head++ = '\x0';
 	return (arr);
 }
 
