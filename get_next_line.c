@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/05 14:48:51 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/05 15:24:53 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,14 +51,36 @@ ssize_t	fill_stash(int fd, char	**stash)
 // Repeated calls to your gnl should let you read the fd one line at a time
 // or NULL/(char *)0 in case of error.
 
+// create a function -> create_line
+// create_line creates and returns a line if the is a '\n' in the stash
+// 
+char	*create_line(int , char **stash)
+{
+	int		sep;
+	char	*line;
+	
+	sep = ft_strchr(stash, '\n');
+	if (sep != -1)
+	{
+		char *old_stash = stash; // pattern here
+		line = ft_substr(old_stash, 0, sep + 1);
+		stash = ft_substr(old_stash, sep + 1, ft_strlen(old_stash) - (sep + 1));
+		free(old_stash);
+	}
+	else
+	{
+		line = stash;
+		stash = (char *)0;
+		free(stash);
+	}
+}
+
 char	*get_next_line(int fd)
 {
 	static char		*stash;
+	char			*line;
 	ssize_t			bytesread;
 
-	int				sep;
-	char			*line;
-	
 	if (!stash)
 		stash = calloc(BUFFER_SIZE + 1, sizeof(char));
 	bytesread = fill_stash(fd, &stash);
@@ -70,17 +92,25 @@ char	*get_next_line(int fd)
 		if (bytesread == -1)
 			return ((char *)0);
 	}
-	// Now, how this part should reacts when bytesread == 0 initially?
-	sep = ft_strchr(stash, '\n');
-	if (sep != -1)
-	{
-		char *old_stash = stash; // pattern here
-		line = ft_substr(old_stash, 0, sep + 1);
-		stash = ft_substr(old_stash, sep + 1, ft_strlen(old_stash) - (sep + 1));
-		free(old_stash);
-	}
-	else
-		line = stash;
+	// Now... What happens when :
+		// bytesread == 0 initially ?
+		// There is a '\n' in the stash ?
+
+	line = create_line();
+	// sep = ft_strchr(stash, '\n');
+	// if (sep != -1)
+	// {
+	// 	char *old_stash = stash; // pattern here
+	// 	line = ft_substr(old_stash, 0, sep + 1);
+	// 	stash = ft_substr(old_stash, sep + 1, ft_strlen(old_stash) - (sep + 1));
+	// 	free(old_stash);
+	// }
+	// else
+	// {
+	// 	line = stash;
+	// 	stash = (char *)0;
+	// 	free(stash);
+	// }
 	// printf("\tstash -> '%s'\n", stash);
 	// Is the stash will ever be released ?
 	return (line);
@@ -96,6 +126,7 @@ int	main(void)
 	printf("\tGNL -> '%s'\n", get_next_line(fd));
 
 	printf("\tGNL -> '%s'\n", get_next_line(fd));
-	// printf("\tGNL -> '%s'\n", get_next_line(fd));
+	printf("\tGNL -> '%s'\n", get_next_line(fd));
+	printf("\tGNL -> '%s'\n", get_next_line(fd));
 	close(fd);
 }
