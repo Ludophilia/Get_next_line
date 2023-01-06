@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/06 13:04:52 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/06 17:18:03 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ char	*extract_line(char **stash)
 	return (line);
 }
 
-// should work without BUFFER_SIZE size, maybe with an ifndef
+// The challenge of multiple fd is to have a different stash for each of them
 char	*get_next_line(int fd)
 {
 	static char		*stash;
@@ -86,10 +86,3 @@ char	*get_next_line(int fd)
 	line = extract_line(&stash);
 	return (line);
 }
-
-// return the line from fd (with a \n if it contains one) as a char *
-// Repeated calls to your gnl should let you read the fd one line at a time
-// or NULL/(char *)0 in case of error.
-
-// The challenge of multiple fd is to have a different stash for each of them
-
