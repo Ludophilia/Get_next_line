@@ -6,12 +6,11 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/06 11:35:48 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/06 13:44:15 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME 		= a.out
-
+NAME		= test_gnl
 CC 			= cc
 CCFL 		= -Wall -Wextra -Werror
 
@@ -29,20 +28,14 @@ ifeq 		($(UNAME), Linux)
 endif
 
 all: 		$(NAME)
-			@./$<
 
-m:			all
-			$(VG) $(VGFL) ./$(NAME)
-$(NAME): 	$(OBM)
-			$(CC) $(CCFL) $^ -D BUFFER_SIZE=$(BFSZ) -o $@
-
-%.o: 		%.c
-			@$(CC) $(CCFL) -I$(INCDIR) -c $< -o $@
-test_%: 	all
-			$(CC) $(CCFL) -I$(INCDIR) tests/$@.c -l$(LIB) -L$(LIBDIR)
-			./a.out
+test_%:
+			$(CC) $(CCFL) -I$(INCDIR) -D BUFFER_SIZE=$(BFSZ) \
+			tests/$@.c $(CM) -o tests/$@.out
+			./tests/$@.out
+			
 m_test_%:	test_%
-			$(VG) $(VGFL) ./a.out
+			$(VG) $(VGFL) ./$<.out
 
 re: 		fclean all
 fclean: 	clean

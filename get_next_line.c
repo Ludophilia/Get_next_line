@@ -6,13 +6,11 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/06 11:48:51 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/06 13:04:52 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-
-#include <stdio.h>
 
 ssize_t	fill_stash(int fd, char	**stash)
 {
@@ -24,8 +22,11 @@ ssize_t	fill_stash(int fd, char	**stash)
 	if (!buffer)
 		return (-1);
 	bytesread = read(fd, buffer, BUFFER_SIZE);
-	if (bytesread == -1) // Why not manage error here? There is cleary a pattern in get_next_line below
+	if (bytesread == -1)
+	{
+		free(buffer);
 		return (-1);
+	}
 	old_stash = *stash;
 	*stash = ft_strjoin(old_stash, buffer);
 	free(old_stash);
@@ -69,21 +70,18 @@ char	*get_next_line(int fd)
 	if (!stash)
 		return ((char *)0);
 	bytesread = fill_stash(fd, &stash);
-	if (bytesread == -1 || bytesread == 0)
+	if (bytesread == 0)
 	{
 		free(stash);
 		stash = (char *)0;
-		return ((char *)0);
 	}
+	if (bytesread == -1 || bytesread == 0)
+		return ((char *)0);
 	while (bytesread > 0 && ft_strchr_sp(stash, '\n') == -1)
 	{
 		bytesread = fill_stash(fd, &stash);
 		if (bytesread == -1)
-		{
-			free(stash);
-			stash = (char *)0;
 			return ((char *)0);
-		}
 	}
 	line = extract_line(&stash);
 	return (line);
@@ -92,20 +90,6 @@ char	*get_next_line(int fd)
 // return the line from fd (with a \n if it contains one) as a char *
 // Repeated calls to your gnl should let you read the fd one line at a time
 // or NULL/(char *)0 in case of error.
-int	main(void)
-{
-	int		fd;
-	int		turns;
-	char	*line;
 
-	fd = open("tests/test_file0.txt", O_RDONLY);
-	// printf("\tfd -> %i\n", fd);
-	turns = 50;
-	while (turns--)
-	{
-		line = get_next_line(fd);
-		printf("\tGNL -> '%s'\n", line);
-		free(line);
-	}
-	close(fd);
-}
+// The challenge of multiple fd is to have a different stash for each of them
+
