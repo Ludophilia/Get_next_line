@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/04 15:25:40 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/06 11:35:48 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,8 @@ endif
 all: 		$(NAME)
 			@./$<
 
+m:			all
+			$(VG) $(VGFL) ./$(NAME)
 $(NAME): 	$(OBM)
 			$(CC) $(CCFL) $^ -D BUFFER_SIZE=$(BFSZ) -o $@
 
