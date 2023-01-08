@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:16:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/06 10:45:23 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/08 18:53:15 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,15 +88,13 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ls1 = ft_strlen(s1);
 	ls2 = ft_strlen(s2);
 	dest = malloc((ls1 + ls2 + 1) * sizeof(char));
-	if (dest)
-	{
-		i = 0;
-		while (i < ls1)
-			dest[i++] = *s1++;
-		while (i < (ls1 + ls2))
-			dest[i++] = *s2++;
-		dest[i] = '\x0';
-		return (dest);
-	}
-	return ((char *)0);
+	if (!dest)
+		return ((char *)0);
+	i = 0;
+	while (i < ls1)
+		dest[i++] = *s1++;
+	while (i < (ls1 + ls2))
+		dest[i++] = *s2++;
+	dest[i] = '\x0';
+	return (dest);
 }

@@ -14,6 +14,7 @@ void	read_and_store(char *str, size_t size)
 
 	fd = open(str, O_RDONLY);
 	buffer = calloc(size + 1, 1);
+	printf("size: %lu\n", size);
 	printf("Bytesread: %li\n", read(fd, buffer, size));
 	printf("Buffer: '%s'\n\n", buffer);
 	// lseek(fd, 0, SEEK_SET);
@@ -23,18 +24,21 @@ void	read_and_store(char *str, size_t size)
 
 int	main(void)
 {
-	read_and_store("testfile0.txt", 0);
-	read_and_store("testfile0.txt", 1);
-	read_and_store("testfile0.txt", 10);
-	read_and_store("testfile0.txt", 16); // line size
-	read_and_store("testfile0.txt", 42);
-	read_and_store("testfile0.txt", 62);
-	read_and_store("testfile0.txt", 63); // Size max
-	// read_and_store("testfile0.txt", 64);
-	// read_and_store("testfile0.txt", 999);
-	// read_and_store("testfile0.txt", 1024);
-	// read_and_store("testfile0.txt", 9999);
-	// read_and_store("testfile0.txt", 20230);
-	// read_and_store("testfile0.txt", 10000000);
-	read_and_store("testfile0.txt", BUFFER_SIZE);
+	char	*path;
+
+	path = "testfile_nl1.txt";
+	read_and_store(path, 0);
+	read_and_store(path, 1);
+	read_and_store(path, 10);
+	read_and_store(path, 16); // line size
+	read_and_store(path, 42);
+	read_and_store(path, 62);
+	read_and_store(path, 63); // Size max
+	// read_and_store(path, 64);
+	// read_and_store(path, 999);
+	// read_and_store(path, 1024);
+	// read_and_store(path, 9999);
+	// read_and_store(path, 20230);
+	// read_and_store(path, 10000000);
+	read_and_store(path, BUFFER_SIZE);
 }

@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/02 16:47:51 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/08 18:37:49 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/08 20:17:04 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,21 +24,12 @@ Test material
 Prototype
 	char	*get_next_line(int fd);
 
-[
-don't forget to play with the buffer size:
-	- gcc -D BUFFERSIZE=0
-	- gcc -D BUFFERSIZE=1 (?)
-	- gcc -D BUFFERSIZE=10
-	- gcc -D BUFFERSIZE=<len of the line to read>
-	- gcc -D BUFFERSIZE=42
-	- gcc -D BUFFERSIZE=999 (?)
-	- gcc -D BUFFERSIZE=1024
-	- gcc -D BUFFERSIZE=20230
-]
+BUFFER_SIZE 0 make the program crash as get_next_line(fd) returns NULL in 
+that case.
 
-[🟢] Happy path 
+[🟢] Happy path 1
 	- set BUFFER_SIZE to 1
-	- open a testfile0.txt that contains a least two lines, 
+	- open a testfile_hp1.txt that contains a least two lines, 
 	- get_next_line(fd)
 		-> 'Hello everyone,\n'
 	- get_next_line(fd)
@@ -47,21 +38,68 @@ don't forget to play with the buffer size:
 		-> (char *)0
 	- get_next_line(fd)
 		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 0, 10, 16, 42, 999, 1024, 20230, 
+	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
 		10 000 0000 and no -D
 
-[🔴] No newline
-(open a file that contains just a few words, but no newline, does it work ?)
-(open a file that contains just a lot of words, but no newline, does it work ?)
+[🟢] No newline 1
+	- set BUFFER_SIZE to 1
+	- open a testfile_nl1.txt that contains nothing, 
+	- get_next_line(fd)
+		-> (char *)0
+	- every other call to get_next_line(fd)
+		-> (char *)0
+	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
+		10 000 0000 and no -D
+
+[🟢] No newline 2
+	- set BUFFER_SIZE to 1
+	- open a testfile_nl1.txt that contains a single character, 
+	- get_next_line(fd)
+		-> 'z'
+	- every other call to get_next_line(fd)
+		-> (char *)0
+	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
+		10 000 0000 and no -D
+
+[🔴] No newline 2
+	- set BUFFER_SIZE to 1
+	- open a testfile_nl2.txt that contains a few words but still no newline, 
+	- get_next_line(fd)
+		-> 'this file still has no newline but is a little more verbose :)'
+	- every other call to get_next_line(fd)
+		-> (char *)0
+	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
+		10 000 0000 and no -D
+
+[🔴] No newline 3
+	- set BUFFER_SIZE to 1
+	- open a testfile_nl2.txt that contains a few words but still no newline,
+	- get_next_line(fd)
+		-> 'this file still has no newline but is a little more verbose :)'
+	- every other call to get_next_line(fd)
+		-> (char *)0
+	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
+		10 000 0000 and no -D
+
+[🔴] (open a file that contains just a lot of words, but no newline, does it work ?)
+
+
+
+
+
+
 
 [🔴] Small file 
 (file of 1 char with a newline)
-(file of 3 char without a newline)
 
 [🔴] FAT FILE 
 (file of 2500 chars)
 
-[🔴] Nothing to read (file of 0bytes)
+[🔴] Nothing to read (empty file, file of 0bytes)
+(should return NULL)
+
+[🔴] Nothing to read ?
+(file  with just a series of newline, no other characters)
 (should return NULL)
 
 [🔴] Standard file descriptor 
