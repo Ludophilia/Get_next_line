@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/06 15:49:53 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/08 18:28:41 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CCFL 		= -Wall -Wextra -Werror
 MCRFL		= -D BUFFER_SIZE=$(BFSZ)
 INCFL		= -I$(INCDIR)
 
-BFSZ		= 10 #${BSIZE}
+BFSZ		= ${SIZE}
 INCDIR 		= .
 TESDIR		= tests
 

@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/02 16:47:51 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/06 16:18:06 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/08 18:37:49 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,6 @@ Evil tests made with 😈😈😈 passion
 Context : Create get_next_line(int fd), a function that reads a file
 descriptor (int fd) and returns the next line to be read (depends on read from 
 unistd.h) in this file descriptor as a string.
-
 
 Test material
 	- a file descriptor pointing to a file or stdin, stdout, stderr
@@ -37,11 +36,19 @@ don't forget to play with the buffer size:
 	- gcc -D BUFFERSIZE=20230
 ]
 
-[🔴] Happy path 
-	(open a file that contains a least two lines, read it and return the 
-	result.
-	Then, do it again... Should read the next line. Then do it again... 
-	What happens ? Should return NULL right ?)
+[🟢] Happy path 
+	- set BUFFER_SIZE to 1
+	- open a testfile0.txt that contains a least two lines, 
+	- get_next_line(fd)
+		-> 'Hello everyone,\n'
+	- get_next_line(fd)
+		-> 'Glad to see you all again in such good shape :)'
+	- get_next_line(fd)
+		-> (char *)0
+	- get_next_line(fd)
+		-> (char *)0
+	- repeat with -D BUFFER_SIZE to 0, 10, 16, 42, 999, 1024, 20230, 
+		10 000 0000 and no -D
 
 [🔴] No newline
 (open a file that contains just a few words, but no newline, does it work ?)

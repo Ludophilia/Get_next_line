@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/06 17:18:03 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/08 18:18:59 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,14 +22,12 @@ ssize_t	fill_stash(int fd, char	**stash)
 	if (!buffer)
 		return (-1);
 	bytesread = read(fd, buffer, BUFFER_SIZE);
-	if (bytesread == -1)
+	if (bytesread > 0)
 	{
-		free(buffer);
-		return (-1);
+		old_stash = *stash;
+		*stash = ft_strjoin(old_stash, buffer);
+		free(old_stash);
 	}
-	old_stash = *stash;
-	*stash = ft_strjoin(old_stash, buffer);
-	free(old_stash);
 	free(buffer);
 	return (bytesread);
 }
@@ -62,27 +60,24 @@ char	*extract_line(char **stash)
 char	*get_next_line(int fd)
 {
 	static char		*stash;
-	char			*line;
 	ssize_t			bytesread;
 
 	if (!stash)
 		stash = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
-	if (!stash)
-		return ((char *)0);
-	bytesread = fill_stash(fd, &stash);
-	if (bytesread == 0)
-	{
-		free(stash);
-		stash = (char *)0;
-	}
-	if (bytesread == -1 || bytesread == 0)
-		return ((char *)0);
-	while (bytesread > 0 && ft_strchr_sp(stash, '\n') == -1)
+	if (stash)
 	{
 		bytesread = fill_stash(fd, &stash);
+		if (bytesread == 0 && !*stash)
+		{
+			free(stash);
+			stash = (char *)0;
+			return ((char *)0);
+		}
+		while (bytesread > 0 && ft_strchr_sp(stash, '\n') == -1)
+			bytesread = fill_stash(fd, &stash);
 		if (bytesread == -1)
 			return ((char *)0);
+		return (extract_line(&stash));
 	}
-	line = extract_line(&stash);
-	return (line);
+	return ((char *)0);
 }

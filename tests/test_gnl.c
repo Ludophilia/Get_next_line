@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 13:04:17 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/06 17:33:47 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/08 18:32:53 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ void	gnl_testcase(char *name, char *path,  int lines, char *expect[])
 // or NULL/(char *)0 in case of error.
 int	main(void)
 {
-	printf("Test get_next_line:\n");
+	printf("get_next_line with BUFFER_SIZE=%i\n", BUFFER_SIZE);
 	gnl_testcase(
 		"Happy Path (1)",
 		"tests/testfile0.txt",
