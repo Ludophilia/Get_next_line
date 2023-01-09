@@ -6,19 +6,19 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:10:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/09 13:11:37 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/09 17:50:11 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test_gnl.h"
+#include "../includes/test_gnl.h"
 
-void	nothing_series(int doit)
+void	nothing_series(int do_it)
 {
-	if (!doit)
+	if (!do_it)
 		return ;
 	gnl_testcase(
 		"Nothing (1)",
-		"tests/testfile_n1.txt",
+		"tests/testfiles/" "testfile_n1.txt",
 		2,
 		(char *[]){
 			(char *)0,
@@ -27,7 +27,7 @@ void	nothing_series(int doit)
 	);
 	gnl_testcase(
 		"Nothing (2)",
-		"tests/testfile_n2.txt",
+		"tests/testfiles/" "testfile_n2.txt",
 		3,
 		(char *[]){
 			"\n",
@@ -37,7 +37,7 @@ void	nothing_series(int doit)
 	);
 	gnl_testcase(
 		"Nothing (3)",
-		"tests/testfile_n3.txt",
+		"tests/testfiles/" "testfile_n3.txt",
 		6,
 		(char *[]){
 			"\n",

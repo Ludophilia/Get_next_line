@@ -6,15 +6,15 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:08:35 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/09 13:44:43 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/09 17:41:48 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "test_gnl.h"
+#include "../includes/test_gnl.h"
 
-void	happy_path_series(int doit)
+void	happy_path_series(int do_it)
 {
-	if (!doit)
+	if (!do_it)
 		return ;
 	gnl_testcase(
 		"Happy Path (1)",

@@ -6,12 +6,12 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 13:04:17 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/09 13:13:52 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/09 18:09:53 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
-#include "test_gnl.h"
+#include "../get_next_line.h"
+#include "includes/test_gnl.h"
 
 void	test_line(int fd, char *expect)
 {
@@ -42,7 +42,7 @@ void	gnl_testcase(char *name, char *path,  int lines, char *expect[])
 int	main(void)
 {
 	printf("get_next_line with BUFFER_SIZE=%i\n", BUFFER_SIZE);
-	happy_path_series(0);
+	happy_path_series(1);
 	nothing_series(1);
-	no_newline_series(0);
+	no_newline_series(1);
 }

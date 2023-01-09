@@ -6,46 +6,57 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/09 13:16:11 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/09 18:08:10 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
-NAME		= test_gnl
+NAME						= test_gnl.out
 
-CC 			= cc
-CCFL 		= -Wall -Wextra -Werror
-MCRFL		= -D BUFFER_SIZE=$(BFSZ)
-INCFL		= -I$(INCDIR)
+CC							= cc
+CCFL						= -Wall -Wextra -Werror
+MCRFL						= -D BUFFER_SIZE=${SIZE}
+GIFL						= -I.
+TIFL						= -I$(TSDIR)/includes
 
-BFSZ		= ${SIZE}
-INCDIR 		= .
-TESDIR		= tests
+TSDIR						= tests
+CASDIR						= $(TSDIR)/testcases
 
-CM 			= get_next_line.c get_next_line_utils.c
-OBM 		= $(CM:.c=.o)
+GNLSC						= get_next_line.c \
+								get_next_line_utils.c
+TSSC						= $(TSDIR)/test_gnl.c \
+								$(CASDIR)/happy_path.c \
+								$(CASDIR)/no_newline_series.c \
+								$(CASDIR)/nothing_series.c
+GNLOB						= $(GNLSC:.c=.o)
+TSOB						= $(TSSC:.c=.o)
 
-UNAME 		= $(shell uname -s)
-ifeq 		($(UNAME), Linux)
-	VG 		= valgrind
-	VGFL 	= --leak-check=full --show-leak-kinds=all --track-origins=yes 
+UNAME						= $(shell uname)
+ifeq						($(UNAME), Linux)
+VG							= valgrind
+VGFL						= --leak-check=full --show-leak-kinds=all \
+								--track-origins=yes
 endif
 
-all: 		$(NAME)
+all:						$(NAME)
+							./$<
 
-test_%:
-			$(CC) $(CCFL) $(INCFL) $(MCRFL) \
-				$(TESDIR)/$@.c $(CM) \
-				-o $(TESDIR)/$@.out
-			./$(TESDIR)/$@.out
-			
-mtest_%:	test_%
-			$(VG) $(VGFL) ./$(TESDIR)/$<.out
+memtest:					$(NAME)
+							$(VG) $(VGFL) ./$<
+		
+$(NAME):					$(GNLOB) $(TSOB)
+							$(CC) $(CCFL) $(GIFL) $(TIFL) $^ -o $@
 
-re: 		fclean all
-fclean: 	clean
-			rm -f $(NAME)
+get%.o:						get%.c
+							$(CC) $(CCFL) $(MCRFL) $(GIFL) -c $<
+
+$(TSDIR)/%.o:				$(TSDIR)/%.c
+							$(CC) $(CCFL) $(MCRFL) $(GIFL) $(TIFL) -c $< -o $@
+
+re:							fclean all
+fclean:						clean
+							rm -f $(NAME)
 clean:
-			rm -f $(OBM)
-			rm -f $(wildcard tests/*.out)
+							rm -f $(GNLOB)
+							rm -f $(TSOB)
 			
-.PHONY: 	all re fclean clean
+.PHONY:						all re fclean clean
