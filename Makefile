@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/08 18:28:41 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/09 13:16:11 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -33,7 +33,8 @@ endif
 all: 		$(NAME)
 
 test_%:
-			$(CC) $(CCFL) $(INCFL) $(MCRFL) $(TESDIR)/$@.c $(CM) \
+			$(CC) $(CCFL) $(INCFL) $(MCRFL) \
+				$(TESDIR)/$@.c $(CM) \
 				-o $(TESDIR)/$@.out
 			./$(TESDIR)/$@.out
 			
