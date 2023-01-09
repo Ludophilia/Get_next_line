@@ -1,12 +1,12 @@
 # **************************************************************************** #
 #                                                                              #
 #                                                         :::      ::::::::    #
-#    test_gnl.txt                                       :+:      :+:    :+:    #
+#    all_testcases.txt                                  :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/02 16:47:51 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/09 12:59:20 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/09 18:43:08 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -121,22 +121,15 @@ NO NEWLINE SERIES
 
 NEWLINE SERIES
 
-
 (a file with just a character and newline)
 (a file with just a character + newline 5 times)
+(a file with just a small text that holds on a line + newline 3 times)
+(a file with just a small text that holds on 5 lines + no newline at the end)
+(a file with just a text file of 2500 chars  that holds on 15 lines + 3 newlines
+at the end)
 
-(a file with just a character + newline 5 times)
+XXXXX SERIES
 
-
-[🔴] Small file 
-(file of 1 char with a newline)
-
-[🔴] FAT FILE 
-(file of 2500 chars)
-
-[🔴] Nothing to read ?
-(file  with just a series of newline, no other characters)
-(should return NULL)
 
 [🔴] Standard file descriptor 
 Test all standard fd (fd >= 0 && fd >= 2)
@@ -144,8 +137,12 @@ Test all standard fd (fd >= 0 && fd >= 2)
 [🔴] Wrong file descriptor (fd does not exists)
 (should return NULL)
 
+XXXXX SERIES
+
 [🔴] No human readable file format 
 (binary file...?)
+
+XXXXX SERIES
 
 [🔴] What, the file has changed between two calls?
 

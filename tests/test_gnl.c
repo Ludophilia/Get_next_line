@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 13:04:17 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/09 18:09:53 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/09 18:35:37 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	gnl_testcase(char *name, char *path,  int lines, char *expect[])
 int	main(void)
 {
 	printf("get_next_line with BUFFER_SIZE=%i\n", BUFFER_SIZE);
-	happy_path_series(1);
-	nothing_series(1);
-	no_newline_series(1);
+	happy_path_series(0);
+	nothing_series(0);
+	no_newline_series(0);
 }
