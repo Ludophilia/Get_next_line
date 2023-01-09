@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 13:04:17 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/09 12:19:41 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/09 12:55:21 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,13 +58,13 @@ static void	happy_path_series(int doit)
 	);
 }
 
-static void no_newline_series(int doit)
+static void nothing_series(int doit)
 {
 	if (!doit)
 		return ;
 	gnl_testcase(
-		"No newline (1)",
-		"tests/testfile_nl1.txt",
+		"Nothing (1)",
+		"tests/testfile_n1.txt",
 		2,
 		(char *[]){
 			(char *)0,
@@ -72,8 +72,37 @@ static void no_newline_series(int doit)
 		}
 	);
 	gnl_testcase(
-		"No newline (2)",
-		"tests/testfile_nl2.txt",
+		"Nothing (2)",
+		"tests/testfile_n2.txt",
+		3,
+		(char *[]){
+			"\n",
+			(char *)0,
+			(char *)0
+		}
+	);
+	gnl_testcase(
+		"Nothing (3)",
+		"tests/testfile_n3.txt",
+		6,
+		(char *[]){
+			"\n",
+			"\n",
+			"\n",
+			(char *)0,
+			(char *)0,
+			(char *)0
+		}
+	);
+}
+
+static void no_newline_series(int doit)
+{
+	if (!doit)
+		return ;
+	gnl_testcase(
+		"No newline (1)",
+		"tests/testfile_nnl1.txt",
 		6,
 		(char *[]){
 			"z",
@@ -85,8 +114,8 @@ static void no_newline_series(int doit)
 		}
 	);
 	gnl_testcase(
-		"No newline (3)",
-		"tests/testfile_nl3.txt",
+		"No newline (2)",
+		"tests/testfile_nnl2.txt",
 		6,
 		(char *[]){
 			"this file still has no newline but is a little more verbose :)",
@@ -98,8 +127,8 @@ static void no_newline_series(int doit)
 		}
 	);
 	gnl_testcase(
-		"No newline (4)",
-		"tests/testfile_nl4.txt",
+		"No newline (3)",
+		"tests/testfile_nnl3.txt",
 		3,
 		(char *[]){
 			"this file will contain a decent amount of characters,"
@@ -111,8 +140,8 @@ static void no_newline_series(int doit)
 		}
 	);
 	gnl_testcase(
-		"No newline (5)",
-		"tests/testfile_nl5.txt",
+		"No newline (4)",
+		"tests/testfile_nnl4.txt",
 		3,
 		(char *[]){
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "
@@ -165,5 +194,6 @@ int	main(void)
 {
 	printf("get_next_line with BUFFER_SIZE=%i\n", BUFFER_SIZE);
 	happy_path_series(0);
-	no_newline_series(1);
+	nothing_series(1);
+	no_newline_series(0);
 }

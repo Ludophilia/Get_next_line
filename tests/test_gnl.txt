@@ -6,13 +6,13 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/02 16:47:51 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/09 12:10:03 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/09 12:59:20 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 Libft - Get next Line 🟢🔴
 
-Evil tests made with 😈😈😈 passion
+Evil tests made with 😈😈😈
 
 Context : Create get_next_line(int fd), a function that reads a file
 descriptor (int fd) and returns the next line to be read (depends on read from 
@@ -31,7 +31,7 @@ HAPPY PATH SERIES
 
 [🟢] Happy path 1
 	- set BUFFER_SIZE to 1
-	- open a testfile_hp1.txt that contains a least two lines, 
+	- open a testfile that contains a least two lines, 
 	- get_next_line(fd)
 		-> 'Hello everyone,\n'
 	- get_next_line(fd)
@@ -43,11 +43,11 @@ HAPPY PATH SERIES
 	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
 		10 000 0000 and no -D
 
-ZERO NEWLINE SERIES
+NOTHING SERIES
 
-[🟢] No newline 1
+[🟢] Nothing 1 (no newline 1)
 	- set BUFFER_SIZE to 1
-	- open a testfile_nl1.txt that contains nothing, 
+	- open a testfile that contains nothing, 
 	- get_next_line(fd)
 		-> (char *)0
 	- every other call to get_next_line(fd)
@@ -55,9 +55,31 @@ ZERO NEWLINE SERIES
 	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
 		10 000 0000 and no -D
 
-[🟢] No newline 2
+[🟢] Nothing 2
 	- set BUFFER_SIZE to 1
-	- open a testfile_nl1.txt that contains a single character, 
+	- open a testfile that contains a newline and nothing else, 
+	- get_next_line(fd)
+		-> (char *)0
+	- every other call to get_next_line(fd)
+		-> (char *)0
+	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230,
+		10 000 0000 and no -D
+
+[🟢] Nothing 3
+	- set BUFFER_SIZE to 1
+	- open a testfile that contains a multiple newlines and nothing else, 
+	- get_next_line(fd)
+		-> (char *)0
+	- every other call to get_next_line(fd)
+		-> (char *)0
+	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230,
+		10 000 0000 and no -D
+
+NO NEWLINE SERIES
+
+[🟢] No newline 1
+	- set BUFFER_SIZE to 1
+	- open a testfile that contains a single character, 
 	- get_next_line(fd)
 		-> 'z'
 	- every other call to get_next_line(fd)
@@ -65,9 +87,20 @@ ZERO NEWLINE SERIES
 	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
 		10 000 0000 and no -D
 
+[🟢] No newline 2
+	- set BUFFER_SIZE to 1
+	- open a testfile that contains a few words but still no newline, 
+	- get_next_line(fd)
+		-> 'this file still has no newline but is a little more verbose :)'
+	- every other call to get_next_line(fd)
+		-> (char *)0
+	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
+		10 000 0000 and no -D
+
 [🟢] No newline 3
 	- set BUFFER_SIZE to 1
-	- open a testfile_nl3.txt that contains a few words but still no newline, 
+	- open a testfile that contains more than a few words but still no
+	newline,
 	- get_next_line(fd)
 		-> 'this file still has no newline but is a little more verbose :)'
 	- every other call to get_next_line(fd)
@@ -77,18 +110,7 @@ ZERO NEWLINE SERIES
 
 [🟢] No newline 4
 	- set BUFFER_SIZE to 1
-	- open a testfile_nl4.txt that contains more than a few words but still no
-	newline,
-	- get_next_line(fd)
-		-> 'this file still has no newline but is a little more verbose :)'
-	- every other call to get_next_line(fd)
-		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
-		10 000 0000 and no -D
-
-[🔴] No newline 5
-	- set BUFFER_SIZE to 1
-	- open a testfile_nl5.txt that contains more than 2000 characters few words,
+	- open a testfile that contains more than 2000 characters few words,
 	but still no newline
 	- get_next_line(fd)
 		-> 'this file still has no newline but is a little more verbose :)'
@@ -97,7 +119,13 @@ ZERO NEWLINE SERIES
 	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
 		10 000 0000 and no -D
 
-??? SERIES
+NEWLINE SERIES
+
+
+(a file with just a character and newline)
+(a file with just a character + newline 5 times)
+
+(a file with just a character + newline 5 times)
 
 
 [🔴] Small file 
@@ -105,9 +133,6 @@ ZERO NEWLINE SERIES
 
 [🔴] FAT FILE 
 (file of 2500 chars)
-
-[🔴] Nothing to read (empty file, file of 0bytes)
-(should return NULL)
 
 [🔴] Nothing to read ?
 (file  with just a series of newline, no other characters)
