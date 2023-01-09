@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/02 16:47:51 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/08 20:17:04 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/09 12:10:03 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,8 @@ Prototype
 BUFFER_SIZE 0 make the program crash as get_next_line(fd) returns NULL in 
 that case.
 
+HAPPY PATH SERIES
+
 [🟢] Happy path 1
 	- set BUFFER_SIZE to 1
 	- open a testfile_hp1.txt that contains a least two lines, 
@@ -40,6 +42,8 @@ that case.
 		-> (char *)0
 	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
 		10 000 0000 and no -D
+
+ZERO NEWLINE SERIES
 
 [🟢] No newline 1
 	- set BUFFER_SIZE to 1
@@ -61,9 +65,9 @@ that case.
 	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
 		10 000 0000 and no -D
 
-[🔴] No newline 2
+[🟢] No newline 3
 	- set BUFFER_SIZE to 1
-	- open a testfile_nl2.txt that contains a few words but still no newline, 
+	- open a testfile_nl3.txt that contains a few words but still no newline, 
 	- get_next_line(fd)
 		-> 'this file still has no newline but is a little more verbose :)'
 	- every other call to get_next_line(fd)
@@ -71,9 +75,10 @@ that case.
 	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
 		10 000 0000 and no -D
 
-[🔴] No newline 3
+[🟢] No newline 4
 	- set BUFFER_SIZE to 1
-	- open a testfile_nl2.txt that contains a few words but still no newline,
+	- open a testfile_nl4.txt that contains more than a few words but still no
+	newline,
 	- get_next_line(fd)
 		-> 'this file still has no newline but is a little more verbose :)'
 	- every other call to get_next_line(fd)
@@ -81,12 +86,18 @@ that case.
 	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
 		10 000 0000 and no -D
 
-[🔴] (open a file that contains just a lot of words, but no newline, does it work ?)
+[🔴] No newline 5
+	- set BUFFER_SIZE to 1
+	- open a testfile_nl5.txt that contains more than 2000 characters few words,
+	but still no newline
+	- get_next_line(fd)
+		-> 'this file still has no newline but is a little more verbose :)'
+	- every other call to get_next_line(fd)
+		-> (char *)0
+	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
+		10 000 0000 and no -D
 
-
-
-
-
+??? SERIES
 
 
 [🔴] Small file 
