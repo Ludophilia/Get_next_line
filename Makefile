@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/10 10:35:16 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/10 16:39:12 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,6 +27,7 @@ TSSC						= $(TSDIR)/test_gnl.c \
 								$(CASDIR)/happy_path.c \
 								$(CASDIR)/no_newline_series.c \
 								$(CASDIR)/newline_series.c \
+								$(CASDIR)/file_descriptor_series.c \
 								$(CASDIR)/nothing_series.c
 GNLOB						= $(GNLSC:.c=.o)
 TSOB						= $(TSSC:.c=.o)

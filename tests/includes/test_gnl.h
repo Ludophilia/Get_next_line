@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:04:39 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/10 15:53:47 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/10 16:42:40 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,3 +26,4 @@ void	happy_path_series(int do_it);
 void	nothing_series(int do_it);
 void	no_newline_series(int do_it);
 void	newline_series(int do_it);
+void	file_descriptor_series(int do_it);

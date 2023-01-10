@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 13:04:17 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/10 16:22:05 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/10 17:24:37 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,14 @@ void	gnl_testcase(char *name, char *path, off_t offset, int lines,
 	int		fd;
 	int		i;
 
-	printf("\n\t%s with %s\n", name, path);
-	fd = open(path, O_RDONLY);
-	lseek(fd, offset, SEEK_SET);
+	if (path)
+	{
+		printf("\n\t%s with %s\n", name, path);
+		fd = open(path, O_RDONLY);
+		lseek(fd, offset, SEEK_SET);
+	}
+	else
+		fd = 0;
 	i = -1;
 	while (++i < lines)
 		test_line(fd, expect[i]);
@@ -85,4 +90,5 @@ int	main(void)
 	nothing_series(1);
 	no_newline_series(1);
 	newline_series(1);
+	file_descriptor_series(1);
 }
