@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:08:35 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/09 17:41:48 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/10 11:38:29 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	happy_path_series(int do_it)
 	gnl_testcase(
 		"Happy Path (1)",
 		"tests/testfiles/" "testfile_hp1.txt",
+		0,
 		4,
 		(char *[]){
 			"Hello everyone,\n",

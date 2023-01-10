@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:12:24 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/09 17:48:15 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/10 11:38:58 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	no_newline_series(int do_it)
 	gnl_testcase(
 		"No newline (1)",
 		"tests/testfiles/" "testfile_nnl1.txt",
+		0,
 		6,
 		(char *[]){
 			"z",
@@ -32,6 +33,7 @@ void	no_newline_series(int do_it)
 	gnl_testcase(
 		"No newline (2)",
 		"tests/testfiles/" "testfile_nnl2.txt",
+		0,
 		6,
 		(char *[]){
 			"this file still has no newline but is a little more verbose :)",
@@ -45,6 +47,7 @@ void	no_newline_series(int do_it)
 	gnl_testcase(
 		"No newline (3)",
 		"tests/testfiles/" "testfile_nnl3.txt",
+		0,
 		3,
 		(char *[]){
 			"this file will contain a decent amount of characters,"
@@ -58,6 +61,7 @@ void	no_newline_series(int do_it)
 	gnl_testcase(
 		"No newline (4)",
 		"tests/testfiles/" "testfile_nnl4.txt",
+		0,
 		3,
 		(char *[]){
 			"Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do "

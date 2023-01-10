@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/01/02 16:47:51 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/09 18:43:08 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/10 12:10:34 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -27,10 +27,12 @@ Prototype
 BUFFER_SIZE 0 make the program crash as get_next_line(fd) returns NULL in 
 that case.
 
+Multiple BUFFER_SIZE will be tested throughout this series (1, 10, 16, 42, 999, 
+1024, 20230, 10 000 0000 and no -D)
+
 HAPPY PATH SERIES
 
 [🟢] Happy path 1
-	- set BUFFER_SIZE to 1
 	- open a testfile that contains a least two lines, 
 	- get_next_line(fd)
 		-> 'Hello everyone,\n'
@@ -40,96 +42,113 @@ HAPPY PATH SERIES
 		-> (char *)0
 	- get_next_line(fd)
 		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
-		10 000 0000 and no -D
 
 NOTHING SERIES
 
 [🟢] Nothing 1 (no newline 1)
-	- set BUFFER_SIZE to 1
 	- open a testfile that contains nothing, 
 	- get_next_line(fd)
 		-> (char *)0
 	- every other call to get_next_line(fd)
 		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
-		10 000 0000 and no -D
 
 [🟢] Nothing 2
-	- set BUFFER_SIZE to 1
 	- open a testfile that contains a newline and nothing else, 
 	- get_next_line(fd)
 		-> (char *)0
 	- every other call to get_next_line(fd)
 		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230,
-		10 000 0000 and no -D
 
 [🟢] Nothing 3
-	- set BUFFER_SIZE to 1
 	- open a testfile that contains a multiple newlines and nothing else, 
 	- get_next_line(fd)
 		-> (char *)0
 	- every other call to get_next_line(fd)
 		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230,
-		10 000 0000 and no -D
 
 NO NEWLINE SERIES
 
 [🟢] No newline 1
-	- set BUFFER_SIZE to 1
 	- open a testfile that contains a single character, 
 	- get_next_line(fd)
 		-> 'z'
 	- every other call to get_next_line(fd)
 		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
-		10 000 0000 and no -D
 
 [🟢] No newline 2
-	- set BUFFER_SIZE to 1
 	- open a testfile that contains a few words but still no newline, 
 	- get_next_line(fd)
 		-> 'this file still has no newline but is a little more verbose :)'
 	- every other call to get_next_line(fd)
 		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
-		10 000 0000 and no -D
 
 [🟢] No newline 3
-	- set BUFFER_SIZE to 1
 	- open a testfile that contains more than a few words but still no
 	newline,
 	- get_next_line(fd)
 		-> 'this file still has no newline but is a little more verbose :)'
 	- every other call to get_next_line(fd)
 		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
-		10 000 0000 and no -D
 
 [🟢] No newline 4
-	- set BUFFER_SIZE to 1
 	- open a testfile that contains more than 2000 characters few words,
 	but still no newline
 	- get_next_line(fd)
 		-> 'this file still has no newline but is a little more verbose :)'
 	- every other call to get_next_line(fd)
 		-> (char *)0
-	- repeat with -D BUFFER_SIZE to 10, 16, 42, 999, 1024, 20230, 
-		10 000 0000 and no -D
 
 NEWLINE SERIES
 
-(a file with just a character and newline)
-(a file with just a character + newline 5 times)
-(a file with just a small text that holds on a line + newline 3 times)
-(a file with just a small text that holds on 5 lines + no newline at the end)
-(a file with just a text file of 2500 chars  that holds on 15 lines + 3 newlines
-at the end)
+[🟢] Newline 1
+	- open a testfile that contains a character and a newline, 
+	- get_next_line(fd)
+		-> 'a'
+	- every other call to get_next_line(fd)
+		-> (char *)0
+
+[🟢] Newline 2
+	- open a testfile that contains just a character + newline 5 times, 
+	- get_next_line(fd)
+		-> 's\n'
+	- get_next_line(fd) on lines 2 to 5
+		-> '\n'
+	- every other call to get_next_line(fd)
+		-> (char *)0
+
+[🟢] Newline 3
+	- open a testfile that contains just a small text that holds on a line + 
+	newline 3 times, 
+	- get_next_line(fd)
+		-> '"Focus!" said the anime swordsman who trained a thousand moons just
+		 for this very instant.\n'
+	- get_next_line(fd) on lines 2 to 3
+		-> '\n'
+	- every other call to get_next_line(fd)
+		-> (char *)0
+
+[🟢] Newline 4
+	- open a testfile that contains just a small text that holds on n line + 
+	no newline at the end, 
+	- get_next_line(fd) (lines 1 - 10)
+		-> the line with '\n'
+	- get_next_line(fd) on line 11
+		-> the line
+	- every other call to get_next_line(fd)
+		-> (char *)0
+
+[🟢] Newline 5
+	- open a testfile that contains a text file of 2500 chars on multiple lines 
+	+ 2 newlines at the end)
+	- The tests is done on multiple paragraph of the file
+	- get_next_line(fd) on a line (characters + '\n')
+		-> the characters with '\n'
+	- get_next_line(fd) on empty line
+		-> '\n'
+	- every other call to get_next_line(fd)
+		-> (char *)0
 
 XXXXX SERIES
-
 
 [🔴] Standard file descriptor 
 Test all standard fd (fd >= 0 && fd >= 2)

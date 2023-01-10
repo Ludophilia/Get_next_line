@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/09 18:08:10 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/10 10:35:16 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -26,6 +26,7 @@ GNLSC						= get_next_line.c \
 TSSC						= $(TSDIR)/test_gnl.c \
 								$(CASDIR)/happy_path.c \
 								$(CASDIR)/no_newline_series.c \
+								$(CASDIR)/newline_series.c \
 								$(CASDIR)/nothing_series.c
 GNLOB						= $(GNLSC:.c=.o)
 TSOB						= $(TSSC:.c=.o)
@@ -38,25 +39,25 @@ VGFL						= --leak-check=full --show-leak-kinds=all \
 endif
 
 all:						$(NAME)
-							./$<
+							@./$<
 
 memtest:					$(NAME)
-							$(VG) $(VGFL) ./$<
+							@$(VG) $(VGFL) ./$<
 		
 $(NAME):					$(GNLOB) $(TSOB)
-							$(CC) $(CCFL) $(GIFL) $(TIFL) $^ -o $@
+							@$(CC) $(CCFL) $(GIFL) $(TIFL) $^ -o $@
 
 get%.o:						get%.c
-							$(CC) $(CCFL) $(MCRFL) $(GIFL) -c $<
+							@$(CC) $(CCFL) $(MCRFL) $(GIFL) -c $<
 
 $(TSDIR)/%.o:				$(TSDIR)/%.c
-							$(CC) $(CCFL) $(MCRFL) $(GIFL) $(TIFL) -c $< -o $@
+							@$(CC) $(CCFL) $(MCRFL) $(GIFL) $(TIFL) -c $< -o $@
 
 re:							fclean all
 fclean:						clean
-							rm -f $(NAME)
+							@rm -f $(NAME)
 clean:
-							rm -f $(GNLOB)
-							rm -f $(TSOB)
+							@rm -f $(GNLOB)
+							@rm -f $(TSOB)
 			
 .PHONY:						all re fclean clean
