@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:28:31 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/06 10:52:08 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/11 22:17:15 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,18 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <fcntl.h>
+
+typedef struct s_node
+{
+	void	*content;
+	t_node	*next;
+}	t_node;
+
+int	ft_lstsize(t_node *node);
+void	ft_lstdelone(t_node *node, void (*del)(void *));
+t_node	*ft_lstnew(void *content);
+t_node	*ft_lstlast(t_node *node);
+void	ft_lstadd_back(t_node **head, t_node *new);
 
 size_t	ft_strlen(const char *s);
 int		ft_strchr_sp(const char *s, int c);

@@ -6,15 +6,15 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/11 15:41:07 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/11 22:48:10 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-ssize_t	fill_stash(int fd, char	**stash)
+ssize_t	fill_stash(int fd, t_node **stash)
 {
-	char		*old_stash;
+	t_node		*new_node;
 	ssize_t		bytesread;
 	char		*buffer;
 
@@ -24,13 +24,15 @@ ssize_t	fill_stash(int fd, char	**stash)
 	bytesread = read(fd, buffer, BUFFER_SIZE);
 	if (bytesread > 0)
 	{
-		old_stash = *stash;
-		*stash = ft_strjoin(old_stash, buffer);
-		free(old_stash);
+		new_node = ft_lstnew(buffer); // if ft_lstnew is used only once, create node here
+		if (!new_node)
+			return (-1);
+		ft_lstadd_back(stash, new_node); // If there is a problem ? Segfault
 	}
-	free(buffer);
+	else
+		free(buffer);
 	return (bytesread);
-}
+}-
 
 char	*extract_line(char **stash)
 {
@@ -58,14 +60,14 @@ char	*extract_line(char **stash)
 // The challenge of multiple fd is to have a different stash for each of them
 char	*get_next_line(int fd)
 {
-	static char		*stash;
+	static t_node	**stash;
 	ssize_t			bytesread;
 
 	if (!stash)
-		stash = ft_calloc(BUFFER_SIZE + 1, sizeof(char));
+		stash = ft_calloc(1, sizeof(t_node *));
 	if (stash)
 	{
-		bytesread = fill_stash(fd, &stash);
+		bytesread = fill_stash(fd, stash);
 		if (bytesread == 0 && !*stash)
 		{
 			free(stash);
