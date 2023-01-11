@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 16:40:06 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/10 18:06:08 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/11 12:53:52 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	file_descriptor_series(int do_it)
 		return ;
 	gnl_testcase(
 		"File descriptor (1)",
-		"tests/testfiles/" "???.txt",
+		"testfiles/" "???.txt",
 		0,
 		3,
 		(char *[]){
@@ -29,7 +29,7 @@ void	file_descriptor_series(int do_it)
 	);
 	// gnl_testcase(
 	// 	"File descriptor (2)",
-	// 	"tests/testfiles/" "forbidden_file.txt",
+	// 	"testfiles/" "forbidden_file.txt",
 	// 	0,
 	// 	3,
 	// 	(char *[]){

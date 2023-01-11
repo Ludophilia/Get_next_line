@@ -6,7 +6,7 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/10 16:39:12 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/11 12:57:57 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,14 +15,15 @@ NAME						= test_gnl.out
 CC							= cc
 CCFL						= -Wall -Wextra -Werror
 MCRFL						= -D BUFFER_SIZE=${SIZE}
-GIFL						= -I.
+GIFL						= -I$(ROOT)
 TIFL						= -I$(TSDIR)/includes
 
-TSDIR						= tests
+ROOT						= ..
+TSDIR						= $(ROOT)/tests
 CASDIR						= $(TSDIR)/testcases
 
-GNLSC						= get_next_line.c \
-								get_next_line_utils.c
+GNLSC						= $(ROOT)/get_next_line.c \
+								$(ROOT)/get_next_line_utils.c
 TSSC						= $(TSDIR)/test_gnl.c \
 								$(CASDIR)/happy_path.c \
 								$(CASDIR)/no_newline_series.c \
@@ -46,13 +47,13 @@ memtest:					$(NAME)
 							@$(VG) $(VGFL) ./$<
 		
 $(NAME):					$(GNLOB) $(TSOB)
-							@$(CC) $(CCFL) $(GIFL) $(TIFL) $^ -o $@
+							$(CC) $(CCFL) $(GIFL) $(TIFL) $^ -o $@
 
 get%.o:						get%.c
-							@$(CC) $(CCFL) $(MCRFL) $(GIFL) -c $<
+							$(CC) $(CCFL) $(MCRFL) $(GIFL) -c $< -o $@
 
 $(TSDIR)/%.o:				$(TSDIR)/%.c
-							@$(CC) $(CCFL) $(MCRFL) $(GIFL) $(TIFL) -c $< -o $@
+							$(CC) $(CCFL) $(MCRFL) $(GIFL) $(TIFL) -c $< -o $@
 
 re:							fclean all
 fclean:						clean

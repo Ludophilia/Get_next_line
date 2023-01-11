@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/09 13:10:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/10 11:39:18 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/11 12:55:54 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	nothing_series(int do_it)
 		return ;
 	gnl_testcase(
 		"Nothing (1)",
-		"tests/testfiles/" "testfile_n1.txt",
+		"testfiles/" "testfile_n1.txt",
 		0,
 		2,
 		(char *[]){
@@ -28,7 +28,7 @@ void	nothing_series(int do_it)
 	);
 	gnl_testcase(
 		"Nothing (2)",
-		"tests/testfiles/" "testfile_n2.txt",
+		"testfiles/" "testfile_n2.txt",
 		0,
 		3,
 		(char *[]){
@@ -39,7 +39,7 @@ void	nothing_series(int do_it)
 	);
 	gnl_testcase(
 		"Nothing (3)",
-		"tests/testfiles/" "testfile_n3.txt",
+		"testfiles/" "testfile_n3.txt",
 		0,
 		6,
 		(char *[]){

@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/10 09:56:20 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/10 16:21:14 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/11 12:54:59 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ void	newline_series(int do_it)
 		return ;
 	gnl_testcase(
 		"Newline (1)",
-		"tests/testfiles/" "testfile_nl1.txt",
+		"testfiles/" "testfile_nl1.txt",
 		0,
 		3,
 		(char *[]){
@@ -29,7 +29,7 @@ void	newline_series(int do_it)
 	);
 	gnl_testcase(
 		"Newline (2)",
-		"tests/testfiles/" "testfile_nl2.txt",
+		"testfiles/" "testfile_nl2.txt",
 		0,
 		6,
 		(char *[]){
@@ -43,7 +43,7 @@ void	newline_series(int do_it)
 	);
 	gnl_testcase(
 		"Newline (3)",
-		"tests/testfiles/" "testfile_nl3.txt",
+		"testfiles/" "testfile_nl3.txt",
 		0,
 		5,
 		(char *[]){
@@ -57,7 +57,7 @@ void	newline_series(int do_it)
 	);
 	gnl_testcase(
 		"Newline (4)",
-		"tests/testfiles/" "testfile_nl4.txt",
+		"testfiles/" "testfile_nl4.txt",
 		0,
 		13,
 		(char *[]){
@@ -78,7 +78,7 @@ void	newline_series(int do_it)
 	);
 	gnl_testcase(
 		"Newline (5)",
-		"tests/testfiles/" "testfile_nl5.txt",
+		"testfiles/" "testfile_nl5.txt",
 		0,
 		41,
 		(char *[]){
