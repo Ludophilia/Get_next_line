@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:16:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/06 10:45:23 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/11 15:40:56 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ int	ft_strchr_sp(const char *s, int c)
 {
 	int	i;
 
+	if (!s)
+		return (-1);
 	i = -1;
-	while (s[++i] && s)
+	while (s[++i])
 		if (s[i] == (char)c)
 			return (i);
 	return (-1);
@@ -88,15 +90,13 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	ls1 = ft_strlen(s1);
 	ls2 = ft_strlen(s2);
 	dest = malloc((ls1 + ls2 + 1) * sizeof(char));
-	if (dest)
-	{
-		i = 0;
-		while (i < ls1)
-			dest[i++] = *s1++;
-		while (i < (ls1 + ls2))
-			dest[i++] = *s2++;
-		dest[i] = '\x0';
-		return (dest);
-	}
-	return ((char *)0);
+	if (!dest)
+		return ((char *)0);
+	i = 0;
+	while (i < ls1)
+		dest[i++] = *s1++;
+	while (i < (ls1 + ls2))
+		dest[i++] = *s2++;
+	dest[i] = '\x0';
+	return (dest);
 }

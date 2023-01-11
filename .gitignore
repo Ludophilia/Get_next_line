@@ -39,3 +39,6 @@
 # Env
 .vscode/
 .DS_STORE
+
+#testers
+gnlTester
