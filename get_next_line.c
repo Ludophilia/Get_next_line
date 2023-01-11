@@ -6,12 +6,11 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/10 16:13:01 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/11 15:41:07 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-// #include <stdio.h>
 
 ssize_t	fill_stash(int fd, char	**stash)
 {
@@ -51,10 +50,8 @@ char	*extract_line(char **stash)
 	else
 	{
 		line = *stash;
-		// free(*stash);
 		*stash = (char *)0;
 	}
-	// printf("Line -> '%s' ; Stash -> '%s'\n", line, *stash);
 	return (line);
 }
 

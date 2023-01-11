@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:16:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/08 18:53:15 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/11 15:40:56 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,10 @@ int	ft_strchr_sp(const char *s, int c)
 {
 	int	i;
 
+	if (!s)
+		return (-1);
 	i = -1;
-	while (s[++i] && s)
+	while (s[++i])
 		if (s[i] == (char)c)
 			return (i);
 	return (-1);
