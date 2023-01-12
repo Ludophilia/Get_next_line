@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:16:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/12 14:53:59 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/12 23:34:52 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,14 +25,14 @@
 // 	return (size);
 // }
 
-void	ft_lstdelone(t_node *node, void (*del)(void *))
-{
-	if (!node)
-		return ;
-	if (del)
-		del(node->content);
-	free(node);
-}
+// void	ft_lstdelone(t_node *node, void (*del)(void *))
+// {
+// 	if (!node)
+// 		return ;
+// 	if (del)
+// 		del(node->content);
+// 	free(node);
+// }
 
 t_node	*ft_lstnew(void *content)
 {
@@ -96,31 +96,31 @@ int	ft_strchr_sp(const char *s, int c)
 	return (-1);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
-{
-	char	*substr;
-	size_t	size;
-	size_t	slen;
-	size_t	i;
+// char	*ft_substr(char const *s, unsigned int start, size_t len)
+// {
+// 	char	*substr;
+// 	size_t	size;
+// 	size_t	slen;
+// 	size_t	i;
 
-	if (s == (char *)0)
-		return ((char *)0);
-	size = 0;
-	slen = ft_strlen(s);
-	while (((start + size) < slen) && (size < len))
-		size++;
-	substr = malloc((size + 1) * sizeof(char));
-	if (!substr)
-		return ((char *)0);
-	i = 0;
-	while ((i < size) && ((start + i) < slen))
-	{
-		substr[i] = s[start + i];
-		i++;
-	}
-	substr[i] = '\x0';
-	return (substr);
-}
+// 	if (s == (char *)0)
+// 		return ((char *)0);
+// 	size = 0;
+// 	slen = ft_strlen(s);
+// 	while (((start + size) < slen) && (size < len))
+// 		size++;
+// 	substr = malloc((size + 1) * sizeof(char));
+// 	if (!substr)
+// 		return ((char *)0);
+// 	i = 0;
+// 	while ((i < size) && ((start + i) < slen))
+// 	{
+// 		substr[i] = s[start + i];
+// 		i++;
+// 	}
+// 	substr[i] = '\x0';
+// 	return (substr);
+// }
 
 void	*ft_calloc(size_t nmemb, size_t size)
 {

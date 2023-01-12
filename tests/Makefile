@@ -6,21 +6,21 @@
 #    By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2022/11/30 13:02:44 by jgermany          #+#    #+#              #
-#    Updated: 2023/01/11 13:05:57 by jgermany         ###   ########.fr        #
+#    Updated: 2023/01/12 23:41:44 by jgermany         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME						= test_gnl.out
+
+ROOT						= ..
+TSDIR						= $(ROOT)/tests
+CASDIR						= $(TSDIR)/testcases
 
 CC							= cc
 CCFL						= -Wall -Wextra -Werror
 MCRFL						= -D BUFFER_SIZE=${SIZE}
 GIFL						= -I$(ROOT)
 TIFL						= -I$(TSDIR)/includes
-
-ROOT						= ..
-TSDIR						= $(ROOT)/tests
-CASDIR						= $(TSDIR)/testcases
 
 GNLSC						= $(ROOT)/get_next_line.c \
 								$(ROOT)/get_next_line_utils.c

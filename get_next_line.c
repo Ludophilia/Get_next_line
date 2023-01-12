@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/12 15:25:41 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/12 23:38:26 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,7 @@ ssize_t	fill_stash(int fd, t_node **stash)
 	bytesread = read(fd, buffer, BUFFER_SIZE);
 	if (bytesread > 0)
 	{
-		new_node = ft_lstnew(buffer); // if ft_lstnew is used only once,
-		// create node here...
+		new_node = ft_lstnew(buffer); // if ft_lstnew is used only once, create node here...
 		if (!new_node)
 		{
 			free(buffer);
@@ -42,8 +41,42 @@ void	clean_stash(t_node **stash, int nl_pos)
 {
 	// How to clean the stash ???
 	// What to do to clean the stash ??
-		// - Re
-		// 
+		// - Iterate on the nodes
+		// - If a node doesn't contain '\n', destroy and... move head
+		// to the next node
+		// - If the node contains '\n', create a substring from node's content,
+		// free the old content add the new one at his place
+	t_node	*next;
+	// int		nl_pos;
+	char	*new_content;
+	char	*nc_pos;
+
+	while (*stash)
+	{
+		next = (*stash)->next;
+		nl_pos = ft_strchr_sp((*stash)->content, '\n');
+		if (nl_pos == -1)
+		{
+			free((*stash)->content);
+			free((*stash));
+		}
+		else
+		{
+			new_content = ft_calloc(ft_strlen((*stash)->content) - nl_pos + 1,
+				sizeof(char));
+			if (new_content)
+			{
+				nc_pos = new_content;
+				while (((*stash)->content)[nl_pos])
+					*nc_pos++ = ((*stash)->content)[nl_pos++];
+				free((*stash)->content);
+				(*stash)->content = new_content;
+				break ; // useless
+			}
+			// no return ?
+		}
+		*stash = next;
+	}
 }
 
 char	*extract_line(t_node **stash, int nl_pos)
@@ -95,7 +128,7 @@ char	*get_next_line(int fd)
 		if (bytesread == 0 && !*stash)
 		{
 			free(stash);
-			stash = (t_node *)0;
+			stash = (t_node **)0;
 			return ((char *)0);
 		}
 		nl_pos = -1;
