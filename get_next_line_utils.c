@@ -6,24 +6,24 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:16:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/11 22:52:13 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/12 14:53:59 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_lstsize(t_node *node)
-{
-	int	size;
+// int	ft_lstsize(t_node *node)
+// {
+// 	int	size;
 
-	size = 0;
-	while (node)
-	{
-		node = node->next;
-		size++;
-	}
-	return (size);
-}
+// 	size = 0;
+// 	while (node)
+// 	{
+// 		node = node->next;
+// 		size++;
+// 	}
+// 	return (size);
+// }
 
 void	ft_lstdelone(t_node *node, void (*del)(void *))
 {
@@ -33,8 +33,6 @@ void	ft_lstdelone(t_node *node, void (*del)(void *))
 		del(node->content);
 	free(node);
 }
-
-
 
 t_node	*ft_lstnew(void *content)
 {
