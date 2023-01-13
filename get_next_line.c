@@ -6,11 +6,12 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/12 23:38:26 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/13 21:42:31 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
 
 ssize_t	fill_stash(int fd, t_node **stash)
 {
@@ -22,9 +23,11 @@ ssize_t	fill_stash(int fd, t_node **stash)
 	if (!buffer)
 		return (-1);
 	bytesread = read(fd, buffer, BUFFER_SIZE);
+	// printf("buffer -> '%s'\n", buffer);
 	if (bytesread > 0)
 	{
-		new_node = ft_lstnew(buffer); // if ft_lstnew is used only once, create node here...
+		new_node = ft_lstnew(buffer); // if ft_lstnew is used only once, 
+		// create node here...
 		if (!new_node)
 		{
 			free(buffer);
@@ -37,79 +40,82 @@ ssize_t	fill_stash(int fd, t_node **stash)
 	return (bytesread);
 }
 
-void	clean_stash(t_node **stash, int nl_pos)
+void	clean_stash(t_node **stash)
 {
-	// How to clean the stash ???
-	// What to do to clean the stash ??
-		// - Iterate on the nodes
-		// - If a node doesn't contain '\n', destroy and... move head
-		// to the next node
-		// - If the node contains '\n', create a substring from node's content,
-		// free the old content add the new one at his place
-	t_node	*next;
-	// int		nl_pos;
 	char	*new_content;
-	char	*nc_pos;
+	t_node	*next;
+	int		nl_pos;
+	int		i;
 
-	while (*stash)
+	nl_pos = -1;
+	// if (!*stash)
+	// 	printf("Cleaning Start: No first node content\n");
+	// else
+	// 	printf("Cleaning Start: First node content: '%s'\n", (*stash)->content);
+	// What happens when there is no newline ?
+	while (*stash && nl_pos == -1)
 	{
 		next = (*stash)->next;
 		nl_pos = ft_strchr_sp((*stash)->content, '\n');
-		if (nl_pos == -1)
-		{
-			free((*stash)->content);
-			free((*stash));
-		}
-		else
-		{
-			new_content = ft_calloc(ft_strlen((*stash)->content) - nl_pos + 1,
-				sizeof(char));
-			if (new_content)
-			{
-				nc_pos = new_content;
-				while (((*stash)->content)[nl_pos])
-					*nc_pos++ = ((*stash)->content)[nl_pos++];
-				free((*stash)->content);
-				(*stash)->content = new_content;
-				break ; // useless
-			}
-			// no return ?
-		}
+		if (nl_pos != -1)
+			break ;
+		free((*stash)->content);
+		free((*stash));
 		*stash = next;
+		if (!next && nl_pos == -1)
+			return ;
 	}
+	new_content = ft_calloc(ft_strlen((*stash)->content) - nl_pos + 1,
+		sizeof(char));
+	if (!new_content)
+		return ; // Is that enough?
+	i = 0;
+	nl_pos += 1;
+	while (((*stash)->content)[nl_pos])
+		new_content[i++] = ((*stash)->content)[nl_pos++];
+	free((*stash)->content);
+	(*stash)->content = new_content;
 }
 
-char	*extract_line(t_node **stash, int nl_pos)
+size_t	content_len(t_node *node)
 {
-	char	*line;
-	char	*linepos;
-	t_node	*node;
-	char	*content;
 	size_t	count;
+	int 	nl_pos;
 
-	node = *stash;
+	// Count the total length of str
 	count = 0;
 	while (node)
 	{
+		nl_pos = ft_strchr_sp(node->content, '\n');
 		if (node->next || (nl_pos == -1))
 			count += ft_strlen(node->content); // Useful ? Optimization later.
 		else
 			count += nl_pos + 1;
 		node = node->next;
 	}
+	return (count);
+}
+
+char	*extract_line(t_node *node)
+{
+	char	*line;
+	int		i;
+	char	*content;
+	size_t	count;
+
+	// Build the line and fill it
+	count = content_len(node);
 	line = ft_calloc(count + 1, sizeof(char));
 	if (!line)
 		return ((char *)0);
-	node = *stash;
-	linepos = line;
+	i = 0;
 	while (node)
 	{
 		content = node->content;
 		while (*content && count--)
-			*linepos++ = *content++;
+			line[i++] = *content++;
 		node = node->next;
 	}
-	clean_stash(stash, nl_pos);
 	return (line);
 }
 
@@ -119,12 +125,18 @@ char	*get_next_line(int fd)
 	static t_node	**stash;
 	int				nl_pos;
 	ssize_t			bytesread;
+	char			*line;
 
 	if (!stash)
 		stash = ft_calloc(1, sizeof(t_node *));
+	// if (!*stash)
+	// 	printf("Start: No first node content\n");
+	// else
+	// 	printf("Start: First node content: '%s'\n", (*stash)->content);
 	if (stash)
 	{
 		bytesread = fill_stash(fd, stash);
+		// printf("bytesread (do) -> %li\n", bytesread);
 		if (bytesread == 0 && !*stash)
 		{
 			free(stash);
@@ -135,12 +147,17 @@ char	*get_next_line(int fd)
 		while (bytesread > 0 && nl_pos == -1)
 		{
 			bytesread = fill_stash(fd, stash);
+			// printf("bytesread (while) -> %li\n", bytesread);
+			// printf("firstnode content: '%s'\n", (*stash)->content);
+			// printf("lastnode content: '%s'\n\n", ft_lstlast(*stash)->content);
 			nl_pos = ft_strchr_sp(ft_lstlast(*stash)->content, '\n');
 		}	
 		if (bytesread == -1)
 			return ((char *)0);
-
-		return (extract_line(stash, nl_pos));
+		line = extract_line(*stash);
+		clean_stash(stash);
+		// printf("End: First node content: '%s'\n", (*stash)->content);
+		return (line);
 	}
 	return ((char *)0);
 }
