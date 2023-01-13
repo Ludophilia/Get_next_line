@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:28:31 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/13 20:11:04 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/06 10:52:08 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,28 +21,14 @@
 # include <stdlib.h>
 # include <fcntl.h>
 
-typedef struct s_node
-{
-	char			*content;
-	struct s_node	*next;
-}	t_node;
-
-// int	ft_lstsize(t_node *node);
-// void	ft_lstdelone(t_node *node, void (*del)(void *));
-t_node	*ft_lstnew(void *content);
-t_node	*ft_lstlast(t_node *node);
-void	ft_lstadd_back(t_node **head, t_node *new);
-
 size_t	ft_strlen(const char *s);
 int		ft_strchr_sp(const char *s, int c);
-// char	*ft_substr(char const *s, unsigned int start, size_t len);
+char	*ft_substr(char const *s, unsigned int start, size_t len);
 void	*ft_calloc(size_t nmemb, size_t size);
-// char	*ft_strjoin(char const *s1, char const *s2);
+char	*ft_strjoin(char const *s1, char const *s2);
 
-ssize_t	fill_stash(int fd, t_node **stash);
-char	*extract_line(t_node *node);
-size_t	content_len(t_node *node);
-void	clean_stash(t_node **stash);
+ssize_t	fill_stash(int fd, char	**stash);
+char	*extract_line(char **stash);
 char	*get_next_line(int fd);
 
 #endif
