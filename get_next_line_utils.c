@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:16:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/11 15:40:56 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/14 15:20:15 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,24 @@ int	ft_strchr_sp(const char *s, int c)
 	return (-1);
 }
 
+void	*ft_calloc(size_t nmemb, size_t size)
+{
+	size_t		total;
+	void		*arr;
+	int			i;
+
+	total = nmemb * size;
+	if ((size != 0) && (nmemb != (total / size)))
+		return (0);
+	arr = malloc(total);
+	if (!arr)
+		return (0);
+	i = 0;
+	while (total--)
+		((char *)arr)[i++] = '\x0';
+	return (arr);
+}
+
 char	*ft_substr(char const *s, unsigned int start, size_t len)
 {
 	char	*substr;
@@ -42,40 +60,22 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	size_t	slen;
 	size_t	i;
 
-	if (s == (char *)0)
-		return ((char *)0);
+	if (s == 0)
+		return (0);
 	size = 0;
 	slen = ft_strlen(s);
 	while (((start + size) < slen) && (size < len))
 		size++;
-	substr = malloc((size + 1) * sizeof(char));
+	substr = ft_calloc(size + 1, sizeof(char));
 	if (!substr)
-		return ((char *)0);
+		return (0);
 	i = 0;
 	while ((i < size) && ((start + i) < slen))
 	{
 		substr[i] = s[start + i];
 		i++;
 	}
-	substr[i] = '\x0';
 	return (substr);
-}
-
-void	*ft_calloc(size_t nmemb, size_t size)
-{
-	size_t		total;
-	void		*arr;
-	void		*head;
-
-	total = nmemb * size;
-	if ((size != 0) && (nmemb != (total / size)))
-		return ((void *)0);
-	arr = malloc(total);
-	head = arr;
-	if (arr)
-		while (total--)
-			*(char *)head++ = '\x0';
-	return (arr);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
@@ -85,18 +85,17 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	size_t	ls2;
 	size_t	i;
 
-	if (s1 == (char *)0 || s2 == (char *)0)
-		return ((char *)0);
+	if (s1 == 0 || s2 == 0)
+		return (0);
 	ls1 = ft_strlen(s1);
 	ls2 = ft_strlen(s2);
-	dest = malloc((ls1 + ls2 + 1) * sizeof(char));
+	dest = ft_calloc(ls1 + ls2 + 1, sizeof(char));
 	if (!dest)
-		return ((char *)0);
+		return (0);
 	i = 0;
 	while (i < ls1)
 		dest[i++] = *s1++;
 	while (i < (ls1 + ls2))
 		dest[i++] = *s2++;
-	dest[i] = '\x0';
 	return (dest);
 }

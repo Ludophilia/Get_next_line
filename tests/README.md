@@ -1,4 +1,4 @@
-gi# Get_next_line tester
+# Get_next_line tester
 
 ## What is it ?
 

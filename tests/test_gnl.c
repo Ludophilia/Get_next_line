@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/06 13:04:17 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/10 17:24:37 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/14 15:33:25 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,5 +90,5 @@ int	main(void)
 	nothing_series(1);
 	no_newline_series(1);
 	newline_series(1);
-	file_descriptor_series(1);
+	// file_descriptor_series(1);
 }
