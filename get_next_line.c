@@ -6,11 +6,21 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/14 16:26:37 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/15 18:34:36 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+char	**free_stash(char **stash)
+{
+	if (!*stash)
+	{
+		free(stash);
+		return (0);
+	}
+	return (stash);
+}
 
 char	*extract_line(char **stash)
 {
@@ -36,9 +46,8 @@ char	*extract_line(char **stash)
 	return (line);
 }
 
-ssize_t	fill_stash(int fd, char	**stash)
+ssize_t	update_stash(int fd, char **stash)
 {
-	char		*old_stash;
 	ssize_t		bytesread;
 	char		*buffer;
 
@@ -46,17 +55,9 @@ ssize_t	fill_stash(int fd, char	**stash)
 	if (!buffer)
 		return (-1);
 	bytesread = read(fd, buffer, BUFFER_SIZE);
-	if (bytesread > 0 && !*stash)
-		*stash = buffer;
-	else if (bytesread > 0 && *stash)
-	{
-		old_stash = *stash;
-		*stash = ft_strjoin(old_stash, buffer);
-		free(old_stash);
-		free(buffer);
-	}
-	else
-		free(buffer);
+	if (bytesread > 0)
+		stash = write_stash(stash, bytesread, buffer);
+	free(buffer);
 	return (bytesread);
 }
 
@@ -70,17 +71,17 @@ char	*get_next_line(int fd)
 		stash = ft_calloc(1, sizeof(char *));
 	if (!stash || BUFFER_SIZE < 1 || fd < 0)
 		return (0);
-	bytesread = fill_stash(fd, stash);
+	bytesread = update_stash(fd, stash);
 	while (bytesread > 0 && ft_strchr_sp(*stash, '\n') == -1)
-		bytesread = fill_stash(fd, stash);
+		bytesread = update_stash(fd, stash);
 	if (bytesread == 0 && (!*stash))
 	{
-		free(stash);
-		stash = 0;
+		stash = free_stash(stash);
 		return (0);
 	}
 	if (bytesread == -1)
 		return (0);
 	line = extract_line(stash);
+	stash = free_stash(stash);
 	return (line);
 }

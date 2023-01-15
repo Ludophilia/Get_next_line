@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:28:31 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/15 16:34:42 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/15 18:47:01 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,11 +29,11 @@ size_t	ft_strlen(const char *s);
 int		ft_strchr_sp(const char *s, int c);
 void	*ft_calloc(size_t nmemb, size_t size);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
-char	*ft_strjoin(char const *s1, char const *s2);
+char	**write_stash(char **stash, int fd, ssize_t bytesread, char *buffer);
 
 char	**free_stash(char **stash);
 char	*extract_line(int fd, char **stash);
-ssize_t	fill_stash(int fd, char	**stash);
+ssize_t	update_stash(int fd, char **stash);
 char	*get_next_line(int fd);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 18:16:33 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/15 13:34:36 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/15 18:46:20 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,24 +78,28 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (substr);
 }
 
-char	*ft_strjoin(char const *s1, char const *s2)
+char	**write_stash(char **stash, int fd, ssize_t bytesread, char *buffer)
 {
-	char	*dest;
-	size_t	ls1;
-	size_t	ls2;
+	char	*old_stash;
+	char	*new_stash;
+	size_t	size;
 	size_t	i;
 
-	if (s1 == 0 || s2 == 0)
-		return (0);
-	ls1 = ft_strlen(s1);
-	ls2 = ft_strlen(s2);
-	dest = ft_calloc(ls1 + ls2 + 1, sizeof(char));
-	if (!dest)
+	old_stash = stash[fd];
+	size = bytesread;
+	if (old_stash)
+		size += ft_strlen(old_stash);
+	new_stash = ft_calloc(size + 1, sizeof(char));
+	if (!new_stash)
 		return (0);
 	i = 0;
-	while (i < ls1)
-		dest[i++] = *s1++;
-	while (i < (ls1 + ls2))
-		dest[i++] = *s2++;
-	return (dest);
+	if (old_stash)
+		while (i < (size - bytesread))
+			new_stash[i++] = *old_stash++;
+	while (i < size)
+		new_stash[i++] = *buffer++;
+	if (stash[fd])
+		free(stash[fd]);
+	stash[fd] = new_stash;
+	return (stash);
 }

@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/15 16:46:55 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/15 18:44:20 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,9 +50,8 @@ char	*extract_line(int fd, char **stash)
 	return (line);
 }
 
-ssize_t	fill_stash(int fd, char	**stash)
+ssize_t	update_stash(int fd, char **stash)
 {
-	char		*old_stash;
 	ssize_t		bytesread;
 	char		*buffer;
 
@@ -60,17 +59,9 @@ ssize_t	fill_stash(int fd, char	**stash)
 	if (!buffer)
 		return (-1);
 	bytesread = read(fd, buffer, BUFFER_SIZE);
-	if (bytesread > 0 && !stash[fd])
-		stash[fd] = buffer;
-	else if (bytesread > 0 && stash[fd])
-	{
-		old_stash = stash[fd];
-		stash[fd] = ft_strjoin(old_stash, buffer);
-		free(old_stash);
-		free(buffer);
-	}
-	else
-		free(buffer);
+	if (bytesread > 0)
+		stash = write_stash(stash, fd, bytesread, buffer);
+	free(buffer);
 	return (bytesread);
 }
 
@@ -84,9 +75,9 @@ char	*get_next_line(int fd)
 		stash = ft_calloc(STASH_SIZE, sizeof(char *));
 	if (!stash || BUFFER_SIZE < 1 || fd < 0)
 		return (0);
-	bytesread = fill_stash(fd, stash);
+	bytesread = update_stash(fd, stash);
 	while (bytesread > 0 && ft_strchr_sp(stash[fd], '\n') == -1)
-		bytesread = fill_stash(fd, stash);
+		bytesread = update_stash(fd, stash);
 	if (bytesread == 0 && (!stash[fd]))
 	{
 		stash = free_stash(stash);
