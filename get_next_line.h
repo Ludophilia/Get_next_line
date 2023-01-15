@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:28:31 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/15 18:29:48 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/15 19:11:25 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@
 
 # include <unistd.h>
 # include <stdlib.h>
-# include <fcntl.h>
 
 size_t	ft_strlen(const char *s);
 int		ft_strchr_sp(const char *s, int c);
