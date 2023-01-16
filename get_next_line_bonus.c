@@ -6,7 +6,7 @@
 /*   By: jgermany <nyaritakunai@outlook.com>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/01/02 16:20:29 by jgermany          #+#    #+#             */
-/*   Updated: 2023/01/15 18:44:20 by jgermany         ###   ########.fr       */
+/*   Updated: 2023/01/16 13:02:19 by jgermany         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,17 +74,18 @@ char	*get_next_line(int fd)
 	if (!stash)
 		stash = ft_calloc(STASH_SIZE, sizeof(char *));
 	if (!stash || BUFFER_SIZE < 1 || fd < 0)
-		return (0);
-	bytesread = update_stash(fd, stash);
-	while (bytesread > 0 && ft_strchr_sp(stash[fd], '\n') == -1)
-		bytesread = update_stash(fd, stash);
-	if (bytesread == 0 && (!stash[fd]))
 	{
 		stash = free_stash(stash);
 		return (0);
 	}
-	if (bytesread == -1)
+	bytesread = update_stash(fd, stash);
+	while (bytesread > 0 && ft_strchr_sp(stash[fd], '\n') == -1)
+		bytesread = update_stash(fd, stash);
+	if ((bytesread == 0 && !stash[fd]) || bytesread == -1)
+	{
+		stash = free_stash(stash);
 		return (0);
+	}
 	line = extract_line(fd, stash);
 	stash = free_stash(stash);
 	return (line);
