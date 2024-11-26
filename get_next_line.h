@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:04:27 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/24 18:44:58 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/26 17:45:15 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,12 @@
 # include <unistd.h>
 # include <stdlib.h>
 
+# ifndef BUFFER_SIZE
+#  define BUFFER_SIZE 1
+# endif
+
 size_t	ft_strlen(const char *s);
-int		get_char_pos(const char *s, int c);
+ssize_t	get_char_pos(const char *s, int c, ssize_t *pos);
 char	*ft_strdup(const char *s);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 char	*ft_strjoin(char const *s1, char const *s2);
