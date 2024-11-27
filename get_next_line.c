@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/26 19:06:20 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/27 12:55:36 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,12 @@ char	*extract_line(ssize_t nl_pos, char **stash)
 	char	*line;
 	char	*old_stash;
 
-	if (nl_pos == -1)
-		return (*stash);
+	if (nl_pos == -1 || nl_pos + 1ul == ft_strlen(*stash))
+	{
+		line = *stash;
+		*stash = NULL;
+		return (line);
+	}
 	line = ft_substr(*stash, 0, nl_pos + 1);
 	if (line == NULL)
 	{
@@ -65,6 +69,7 @@ char	*extract_line(ssize_t nl_pos, char **stash)
 		free(old_stash);
 		return (NULL);
 	}
+	free(old_stash);
 	return (line);
 }
 
@@ -89,12 +94,10 @@ char	*get_next_line(int fd)
 		stash = NULL;
 		return (NULL);
 	}
-	// And if bytesread == 0???
-	// if ()
-	// {
-	line = extract_line(nl_pos, &stash);
-	if (line == NULL)
-		return (NULL);
-	// free(stash);
-	return (line);
+	if (stash)
+	{
+		line = extract_line(nl_pos, &stash);
+		return (line);
+	}
+	return (NULL);
 }
