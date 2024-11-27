@@ -1,14 +1,18 @@
-# BUFFER_SIZE = -1
+# Tests
+
+# Mandatory Part
+
+## BUFFER_SIZE = -1
 
 - [x] all cases
 	-> NULL
 
-# BUFFER_SIZE = 0
+## BUFFER_SIZE = 0
 
 - [x] all cases
 	-> NULL
 
-# BUFFER_SIZE = 1
+## BUFFER_SIZE = 1
 
 - [x] fd < 0
 	-> NULL
@@ -62,7 +66,7 @@
 - [ ] Big text with newline
 	-> ...
 
-# BUFFER_SIZE = 69
+## BUFFER_SIZE = 69
 
 - [x] fd < 0
 	-> NULL
@@ -116,7 +120,7 @@
 - [ ] Big text with newline
 	-> ...
 
-# BUFFER_SIZE = 10000000 (10 millions)
+## BUFFER_SIZE = 10000000 (10 millions)
 
 - [x] fd < 0
 	-> NULL
@@ -169,3 +173,74 @@
 
 - [ ] Big text with newline
 	-> ...
+
+# Bonus Part
+
+## BUFFER_SIZE = -1
+
+- [ ] all cases
+	-> NULL
+
+## BUFFER_SIZE = 0
+
+- [ ] all cases
+	-> NULL
+
+## BUFFER_SIZE = 1
+
+- [ ] fd < 0
+	-> NULL
+
+- [ ] empty file
+	-> NULL (nothing to read)
+
+- [ ] file with 1 newline
+	-> "\n" (first call)
+	-> NULL (second call)
+
+- [ ] file with 3 newlines
+	-> "\n" (1 call)
+	-> "\n" (2 call)
+	-> "\n" (3 call)
+	-> NULL (4 call)
+
+- [ ] file with one character, no new line
+	-> "d" (1 call)
+	-> NULL (2 call)
+
+- [ ] file with 42 characters, no new line
+	-> "01234567890123456789012345678901" (1 call)
+	-> NULL (2 call)
+
+- [ ] file with 42 characters, with new line
+	-> "01234567890123456789012345678901\n" (1 call)
+	-> NULL (2 call)
+
+- [ ] file with 42 characters, with new line, on 3 lines, no newline at the end
+	-> "01234567890123456789012345678901\n" (1 call)
+	-> "01234567890123456789012345678901\n" (2 call)
+	-> "01234567890123456789012345678901" (3 call)
+	-> NULL (4 call)
+
+- [ ] file with alternative newlines, no newline at the end
+	-> "01234567890123456789012345678901\n" (1 call)
+	-> "\n" (2 call)
+	-> "01234567890123456789012345678901" (3 call)
+	-> NULL (4 call)
+
+- [ ] file with alternative newlines, newline at the end
+	-> "01234567890123456789012345678901\n" (1 call)
+	-> "\n" (2 call)
+	-> "01234567890123456789012345678901\n" (3 call)
+	-> NULL (4 call)
+
+- [ ] Big text no newline
+	-> ...
+
+- [ ] Big text with newline
+	-> ...
+
+## BUFFER_SIZE = 69
+
+
+## BUFFER_SIZE = 10000000 (10 millions)

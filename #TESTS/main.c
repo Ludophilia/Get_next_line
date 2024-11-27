@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:26:00 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/27 14:24:52 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/27 17:19:05 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ int	main(void)
 	int		fd;
 	char	*line;
 
+	printf("BUFFER_SIZE -> %i\n", BUFFER_SIZE);
 	fd = open(FILE, O_RDONLY);
 	if (fd == -1 && dprintf(2, "There was a problem with that file\n"))
 		return (1);
