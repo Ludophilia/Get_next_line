@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/27 17:51:02 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/27 17:55:09 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,6 +81,8 @@ static char	*extract_line(char **stash)
 
 // Complétez get_next_line() en lui permettant de gérer plusieurs fd
 // -> One stash per fd?
+// Default limits often range between 1024 and 65535 file descriptors per process
+// depending on the OS and configuration.
 char	*get_next_line(int fd)
 {
 	static char		*stash;
