@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/27 12:55:36 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/27 15:14:51 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,12 +44,14 @@ ssize_t	update_stash(int fd, char **stash)
 	return (bytesread);
 }
 
-char	*extract_line(ssize_t nl_pos, char **stash)
+char	*extract_line(char **stash)
 {
 	char	*line;
 	char	*old_stash;
+	ssize_t	nl_pos;
 
-	if (nl_pos == -1 || nl_pos + 1ul == ft_strlen(*stash))
+	nl_pos = get_char_pos(*stash, '\n');
+	if (nl_pos == -1 || nl_pos + 1l == (ssize_t)ft_strlen(*stash))
 	{
 		line = *stash;
 		*stash = NULL;
@@ -78,14 +80,12 @@ char	*get_next_line(int fd)
 	static char		*stash;
 	char			*line;
 	ssize_t			bytesread;
-	ssize_t			nl_pos;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	line = NULL;
-	nl_pos = -1;
 	bytesread = update_stash(fd, &stash);
-	while (bytesread > 0 && get_char_pos(stash, '\n', &nl_pos) == -1)
+	while (bytesread > 0 && get_char_pos(stash, '\n') == -1)
 		bytesread = update_stash(fd, &stash);
 	if (bytesread == -1)
 	{
@@ -96,7 +96,7 @@ char	*get_next_line(int fd)
 	}
 	if (stash)
 	{
-		line = extract_line(nl_pos, &stash);
+		line = extract_line(&stash);
 		return (line);
 	}
 	return (NULL);

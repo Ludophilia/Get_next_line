@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:04:21 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/26 16:48:10 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/27 15:06:00 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-ssize_t	get_char_pos(const char *s, int c, ssize_t *pos)
+ssize_t	get_char_pos(const char *s, int c)
 {
 	ssize_t	len;
 	ssize_t	i;
@@ -32,10 +32,7 @@ ssize_t	get_char_pos(const char *s, int c, ssize_t *pos)
 	while (i < len)
 	{
 		if (s[i] == (char)c)
-		{
-			*pos = i;
 			return (i);
-		}
 		++i;
 	}
 	return (-1);
