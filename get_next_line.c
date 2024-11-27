@@ -6,17 +6,32 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/27 15:47:12 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/27 16:47:59 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
+
+int	swap_stash(char **stash, char *candidate)
+{
+	char	*old_stash;
+
+	old_stash = *stash;
+	if (candidate == NULL)
+	{
+		*stash = NULL;
+		free(old_stash);
+		return (-1);
+	}
+	*stash = candidate;
+	free(old_stash);
+	return (0);
+}
 
 ssize_t	update_stash(int fd, char *buffer, char **stash)
 {
 	ssize_t		bytesread;
-	char		*old_stash;
+	char		*tmp_stsh;
 	int			i;
 
 	i = -1;
@@ -32,22 +47,17 @@ ssize_t	update_stash(int fd, char *buffer, char **stash)
 			return (-1);
 		return (bytesread);
 	}
-	old_stash = *stash;
-	*stash = ft_strjoin(old_stash, buffer);
-	if (*stash == NULL)
-	{
-		free(old_stash);
+	tmp_stsh = ft_strjoin(*stash, buffer);
+	if (swap_stash(stash, tmp_stsh) == -1)
 		return (-1);
-	}
-	free(old_stash);
 	return (bytesread);
 }
 
 char	*extract_line(char **stash)
 {
-	char	*line;
-	char	*old_stash;
 	ssize_t	nl_pos;
+	char	*line;
+	char	*tmp_stsh;
 
 	nl_pos = get_char_pos(*stash, '\n');
 	if (nl_pos == -1 || nl_pos + 1 == (ssize_t)ft_strlen(*stash))
@@ -62,15 +72,10 @@ char	*extract_line(char **stash)
 		free(stash);
 		return (NULL);
 	}
-	old_stash = *stash;
-	*stash = ft_substr(old_stash, nl_pos + 1, ft_strlen(old_stash) \
+	tmp_stsh = ft_substr(*stash, nl_pos + 1, ft_strlen(*stash) \
 		- (nl_pos + 1));
-	if (*stash == NULL)
-	{
-		free(old_stash);
+	if (swap_stash(stash, tmp_stsh) == -1)
 		return (NULL);
-	}
-	free(old_stash);
 	return (line);
 }
 
@@ -86,7 +91,6 @@ char	*get_next_line(int fd)
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (buffer == NULL)
 		return (NULL);
-	line = NULL;
 	bytesread = update_stash(fd, buffer, &stash);
 	while (bytesread > 0 && get_char_pos(stash, '\n') == -1)
 		bytesread = update_stash(fd, buffer, &stash);
@@ -98,10 +102,8 @@ char	*get_next_line(int fd)
 		stash = NULL;
 		return (NULL);
 	}
-	if (stash)
-	{
-		line = extract_line(&stash);
-		return (line);
-	}
-	return (NULL);
+	if (stash == NULL)
+		return (NULL);
+	line = extract_line(&stash);
+	return (line);
 }
