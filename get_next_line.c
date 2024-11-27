@@ -6,13 +6,13 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/27 16:47:59 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/27 17:00:00 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	swap_stash(char **stash, char *candidate)
+static int	swap_stash(char **stash, char *candidate)
 {
 	char	*old_stash;
 
@@ -28,7 +28,7 @@ int	swap_stash(char **stash, char *candidate)
 	return (0);
 }
 
-ssize_t	update_stash(int fd, char *buffer, char **stash)
+static ssize_t	update_stash(int fd, char *buffer, char **stash)
 {
 	ssize_t		bytesread;
 	char		*tmp_stsh;
@@ -53,7 +53,7 @@ ssize_t	update_stash(int fd, char *buffer, char **stash)
 	return (bytesread);
 }
 
-char	*extract_line(char **stash)
+static char	*extract_line(char **stash)
 {
 	ssize_t	nl_pos;
 	char	*line;
