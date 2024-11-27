@@ -6,16 +6,15 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/27 15:14:51 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/27 15:47:12 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 #include <stdio.h>
 
-ssize_t	update_stash(int fd, char **stash)
+ssize_t	update_stash(int fd, char *buffer, char **stash)
 {
-	char		buffer[BUFFER_SIZE + 1];
 	ssize_t		bytesread;
 	char		*old_stash;
 	int			i;
@@ -51,7 +50,7 @@ char	*extract_line(char **stash)
 	ssize_t	nl_pos;
 
 	nl_pos = get_char_pos(*stash, '\n');
-	if (nl_pos == -1 || nl_pos + 1l == (ssize_t)ft_strlen(*stash))
+	if (nl_pos == -1 || nl_pos + 1 == (ssize_t)ft_strlen(*stash))
 	{
 		line = *stash;
 		*stash = NULL;
@@ -80,13 +79,18 @@ char	*get_next_line(int fd)
 	static char		*stash;
 	char			*line;
 	ssize_t			bytesread;
+	char			*buffer;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
+	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (buffer == NULL)
+		return (NULL);
 	line = NULL;
-	bytesread = update_stash(fd, &stash);
+	bytesread = update_stash(fd, buffer, &stash);
 	while (bytesread > 0 && get_char_pos(stash, '\n') == -1)
-		bytesread = update_stash(fd, &stash);
+		bytesread = update_stash(fd, buffer, &stash);
+	free(buffer);
 	if (bytesread == -1)
 	{
 		if (stash)
