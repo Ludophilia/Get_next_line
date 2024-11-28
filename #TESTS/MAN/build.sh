@@ -6,7 +6,7 @@ CC="cc"
 
 CFLAGS="-Wall -Wextra -Werror -g3"
 
-GNL_DIR=".."
+GNL_DIR="../.."
 
 SRCS='main.c'
 SRCS+=" $GNL_DIR/get_next_line.c"
