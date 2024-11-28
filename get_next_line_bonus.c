@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/27 17:55:09 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:03:54 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static char	*extract_line(char **stash)
 	if (line == NULL)
 	{
 		free(stash);
+		*stash = NULL;
 		return (NULL);
 	}
 	tmp_stsh = ft_substr(*stash, nl_pos + 1, ft_strlen(*stash) \
@@ -79,13 +80,9 @@ static char	*extract_line(char **stash)
 	return (line);
 }
 
-// Complétez get_next_line() en lui permettant de gérer plusieurs fd
-// -> One stash per fd?
-// Default limits often range between 1024 and 65535 file descriptors per process
-// depending on the OS and configuration.
 char	*get_next_line(int fd)
 {
-	static char		*stash;
+	static char		*stash[65535];
 	char			*line;
 	ssize_t			bytesread;
 	char			*buffer;
@@ -95,19 +92,19 @@ char	*get_next_line(int fd)
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (buffer == NULL)
 		return (NULL);
-	bytesread = update_stash(fd, buffer, &stash);
-	while (bytesread > 0 && get_char_pos(stash, '\n') == -1)
-		bytesread = update_stash(fd, buffer, &stash);
+	bytesread = update_stash(fd, buffer, stash + fd);
+	while (bytesread > 0 && get_char_pos(stash[fd], '\n') == -1)
+		bytesread = update_stash(fd, buffer, stash + fd);
 	free(buffer);
 	if (bytesread == -1)
 	{
-		if (stash)
-			free(stash);
-		stash = NULL;
+		if (stash[fd])
+			free(stash[fd]);
+		stash[fd] = NULL;
 		return (NULL);
 	}
-	if (stash == NULL)
+	if (stash[fd] == NULL)
 		return (NULL);
-	line = extract_line(&stash);
+	line = extract_line(stash + fd);
 	return (line);
 }

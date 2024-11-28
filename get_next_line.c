@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/27 17:00:00 by jegerman         ###   ########.fr       */
+/*   Updated: 2024/11/28 13:10:47 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,6 +70,7 @@ static char	*extract_line(char **stash)
 	if (line == NULL)
 	{
 		free(stash);
+		*stash = NULL;
 		return (NULL);
 	}
 	tmp_stsh = ft_substr(*stash, nl_pos + 1, ft_strlen(*stash) \
