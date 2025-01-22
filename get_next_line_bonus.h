@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:04:27 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/27 17:45:11 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/01/22 17:35:02 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 # include <stdlib.h>
 
 # ifndef BUFFER_SIZE
-#  define BUFFER_SIZE 10000000
+#  define BUFFER_SIZE 100
 # endif
 
 size_t		ft_strlen(const char *s);
