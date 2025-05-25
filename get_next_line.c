@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/28 13:10:47 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/25 16:30:50 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -80,6 +80,7 @@ static char	*extract_line(char **stash)
 	return (line);
 }
 
+// 25/05 - 
 char	*get_next_line(int fd)
 {
 	static char		*stash;
