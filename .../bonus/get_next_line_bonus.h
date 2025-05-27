@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:04:27 by jegerman          #+#    #+#             */
-/*   Updated: 2025/01/22 17:35:02 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:19:49 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@
 # endif
 
 size_t		ft_strlen(const char *s);
-ssize_t		get_char_pos(const char *s, int c);
+long		get_char_pos(const char *s, int c);
 char		*ft_strdup(const char *s);
 char		*ft_substr(char const *s, unsigned int start, size_t len);
 char		*ft_strjoin(char const *s1, char const *s2);

@@ -6,15 +6,15 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:04:21 by jegerman          #+#    #+#             */
-/*   Updated: 2025/01/22 17:55:29 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:20:13 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+long	ft_strlen(const char *s)
 {
-	size_t	len;
+	long	len;
 
 	len = 0;
 	while (s[len])
@@ -22,10 +22,10 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-ssize_t	get_char_pos(const char *s, int c)
+long	get_char_pos(const char *s, int c)
 {
-	ssize_t	len;
-	ssize_t	i;
+	long	len;
+	long	i;
 
 	len = ft_strlen(s);
 	i = 0;
@@ -40,7 +40,7 @@ ssize_t	get_char_pos(const char *s, int c)
 
 char	*ft_strdup(const char *s)
 {
-	size_t	size;
+	long	size;
 	char	*dupl;
 	int		i;
 
@@ -55,12 +55,12 @@ char	*ft_strdup(const char *s)
 	return (dupl);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, long len)
 {
 	char	*sub;
-	size_t	slen;
-	size_t	sublen;
-	size_t	i;
+	long	slen;
+	long	sublen;
+	long	i;
 
 	if (s == NULL)
 		return (NULL);
@@ -83,7 +83,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len[2];
+	long	len[2];
 	char	*s1s2;
 	int		i;
 

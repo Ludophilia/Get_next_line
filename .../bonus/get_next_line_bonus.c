@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2025/01/22 17:54:59 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/27 14:19:49 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,9 @@ static int	swap_stash(char **stash, char *candidate)
 	return (0);
 }
 
-static ssize_t	update_stash(int fd, char *buffer, char **stash)
+static long	update_stash(int fd, char *buffer, char **stash)
 {
-	ssize_t		bytesread;
+	long		bytesread;
 	char		*tmp_stsh;
 	int			i;
 
@@ -55,12 +55,12 @@ static ssize_t	update_stash(int fd, char *buffer, char **stash)
 
 static char	*extract_line(char **stash)
 {
-	ssize_t	nl_pos;
+	long	nl_pos;
 	char	*line;
 	char	*tmp_stsh;
 
 	nl_pos = get_char_pos(*stash, '\n');
-	if (nl_pos == -1 || nl_pos + 1 == (ssize_t)ft_strlen(*stash))
+	if (nl_pos == -1 || nl_pos + 1 == (long)ft_strlen(*stash))
 	{
 		line = *stash;
 		*stash = NULL;
@@ -84,7 +84,7 @@ char	*get_next_line(int fd)
 {
 	static char		*stash[65535];
 	char			*line;
-	ssize_t			bytesread;
+	long			bytesread;
 	char			*buffer;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
