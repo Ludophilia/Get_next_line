@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2025/05/27 20:12:22 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/28 19:31:56 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,34 @@ static long	get_char_pos(int c, const char *s)
 	return (-1);
 }
 
+static char	*extract_line(char **stash)
+{
+	char	*line;
+	long	nl_pos;
+	char	*new_stash;
+	long	stash_len;
+
+	nl_pos = get_char_pos('\n', *stash);
+	stash_len = ft_strlen(*stash);
+	if (nl_pos == -1 || (nl_pos + 1) == stash_len)
+	{
+		line = *stash;
+		*stash = NULL;
+		return (line);
+	}
+	else
+	{
+		line = ft_substr(*stash, 0, (nl_pos + 1));
+		if (line == NULL && free_stash(stash))
+			return (NULL);
+		new_stash = ft_substr(*stash, (nl_pos + 1), (stash_len - (nl_pos + 1)));
+		if (new_stash == NULL && (free(line), free_stash(stash)))
+			return (NULL);
+		*stash = (free(*stash), new_stash);
+	}
+	return (line);
+}
+
 static long	update_stash(int fd, char *buffer, char **stash)
 {
 	char	*new_stash;
@@ -49,40 +77,20 @@ static long	update_stash(int fd, char *buffer, char **stash)
 		*stash = ft_strdup(buffer);
 		if (*stash == NULL)
 			return (-1);
-		return (bytes);
 	}
-	new_stash = ft_strjoin(*stash, buffer);
-	if (new_stash == NULL && free_stash(stash))
-		return (-1);
-	*stash = (free(*stash), new_stash);
+	else
+	{
+		new_stash = ft_strjoin(*stash, buffer);
+		if (new_stash == NULL && free_stash(stash))
+			return (-1);
+		*stash = (free(*stash), new_stash);
+	}
 	return (bytes);
 }
 
-static char	*extract_line(char **stash)
-{
-	char	*line;
-	long	nl_pos; // 28/05 - We don;t want this.
-	char	*new_stash;
-	long	stash_len;
-
-	nl_pos = get_char_pos('\n', *stash);
-	stash_len = ft_strlen(*stash);
-	if (nl_pos == -1 || nl_pos + 1 == stash_len)
-	{
-		line = *stash;
-		*stash = NULL;
-		return (line);
-	}
-	line = ft_substr(*stash, 0, nl_pos + 1);
-	if (line == NULL && free_stash(stash))
-		return (NULL);	
-	new_stash = ft_substr(*stash, nl_pos + 1, stash_len - (nl_pos + 1));
-	if (new_stash == NULL && (free(line), free_stash(stash)))
-		return (NULL);
-	*stash = (free(*stash), new_stash);
-	return (line);
-}
-
+// 28/05 - Find a way to get rid of the need to scan TWICE nl_pos
+// 		 - please find the origin of that timeout in francinette --strict
+//		 -  After that, check the utils again
 char	*get_next_line(int fd)
 {
 	static char	*stash;
@@ -96,9 +104,7 @@ char	*get_next_line(int fd)
 	if (buffer == NULL && free_stash(&stash))
 		return (NULL);
 	bytes = update_stash(fd, buffer, &stash);
-	// 28/05 - Find a way to get rid of the need to scan TWICE nl_pos
-	//		 -  After that, check the utils again
-	while (bytes > 0 && get_char_pos('\n', stash) == -1)
+	while (bytes > 0 && get_char_pos('\n', buffer) == -1)
 		bytes = update_stash(fd, buffer, &stash);
 	free(buffer);
 	if (bytes == -1 || stash == NULL)
