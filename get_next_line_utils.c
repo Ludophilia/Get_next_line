@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:04:21 by jegerman          #+#    #+#             */
-/*   Updated: 2025/05/27 19:32:05 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:20:55 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,12 +56,9 @@ char	*ft_substr(char const *s, unsigned int start, long len)
 	if (sub == NULL)
 		return (NULL);
 	sub[sublen] = 0;
-	i = 0;
-	while (i < sublen)
-	{
+	i = -1;
+	while (++i < sublen)
 		sub[i] = s[start + i];
-		++i;
-	}
 	return (sub);
 }
 
@@ -79,16 +76,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (s1s2 == NULL)
 		return (NULL);
 	s1s2[len[0] + len[1]] = 0;
-	i = 0;
-	while (s1[i])
-	{
+	i = -1;
+	while (s1[++i])
 		s1s2[i] = s1[i];
-		++i;
-	}
-	while (s2[i - len[0]])
-	{
+	--i;
+	while (s2[++i - len[0]])
 		s1s2[i] = s2[i - len[0]];
-		++i;
-	}
 	return (s1s2);
 }

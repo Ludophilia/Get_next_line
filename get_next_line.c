@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2025/05/29 17:52:17 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:33:44 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ static int	get_nl_pos(char **stash, long *nl_pos)
 		if ((*stash)[i] == '\n')
 		{
 			*nl_pos = i;
-			return (1);
+			break ;
 		}
 	}
 	return (1);
@@ -92,7 +92,6 @@ static long	update_stash(int fd, char *buffer, long *nl_pos, char **stash)
 	return (bytes);
 }
 
-//		 -  After that, check the utils again
 char	*get_next_line(int fd)
 {
 	static char	*stash;
@@ -115,12 +114,3 @@ char	*get_next_line(int fd)
 	line = extract_line(nl_pos, &stash);
 	return (line);
 }
-
-// Type of lines:
-
-// 		"" (read -> 0; nl_pos = -1)
-// 		"abcdef" (read -> 6; nl_pos = -1)
-
-//		"\n" (read -> 1 ; nl_pos = 0)
-//		"lol\n" (read -> 4 ; nl_pos = 3)
-//		"a\nb" (read -> 3 ; nl_pos = 1)
