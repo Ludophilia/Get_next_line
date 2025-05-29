@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2025/05/28 19:31:56 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/29 17:52:17 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,27 +22,33 @@ static int	free_stash(char **stash)
 	return (1);
 }
 
-static long	get_char_pos(int c, const char *s)
+static int	get_nl_pos(char **stash, long *nl_pos)
 {
 	long	len;
 	long	i;
 
-	len = ft_strlen(s);
+	*nl_pos = -1;
+	if (*stash == NULL)
+		return (1);
+	len = ft_strlen(*stash);
 	i = -1;
 	while (++i < len)
-		if (s[i] == (char)c)
-			return (i);
-	return (-1);
+	{
+		if ((*stash)[i] == '\n')
+		{
+			*nl_pos = i;
+			return (1);
+		}
+	}
+	return (1);
 }
 
-static char	*extract_line(char **stash)
+static char	*extract_line(long nl_pos, char **stash)
 {
 	char	*line;
-	long	nl_pos;
 	char	*new_stash;
 	long	stash_len;
 
-	nl_pos = get_char_pos('\n', *stash);
 	stash_len = ft_strlen(*stash);
 	if (nl_pos == -1 || (nl_pos + 1) == stash_len)
 	{
@@ -50,26 +56,24 @@ static char	*extract_line(char **stash)
 		*stash = NULL;
 		return (line);
 	}
-	else
-	{
-		line = ft_substr(*stash, 0, (nl_pos + 1));
-		if (line == NULL && free_stash(stash))
-			return (NULL);
-		new_stash = ft_substr(*stash, (nl_pos + 1), (stash_len - (nl_pos + 1)));
-		if (new_stash == NULL && (free(line), free_stash(stash)))
-			return (NULL);
-		*stash = (free(*stash), new_stash);
-	}
+	line = ft_substr(*stash, 0, (nl_pos + 1));
+	if (line == NULL && free_stash(stash))
+		return (NULL);
+	new_stash = ft_substr(*stash, (nl_pos + 1), (stash_len - (nl_pos + 1)));
+	if (new_stash == NULL && (free(line), free_stash(stash)))
+		return (NULL);
+	*stash = (free(*stash), new_stash);
 	return (line);
 }
 
-static long	update_stash(int fd, char *buffer, char **stash)
+static long	update_stash(int fd, char *buffer, long *nl_pos, char **stash)
 {
 	char	*new_stash;
 	long	bytes;
 
 	bytes = read(fd, buffer, BUFFER_SIZE);
-	if (bytes == 0 || (bytes == -1 && free_stash(stash)))
+	if ((bytes == 0 && get_nl_pos(stash, nl_pos))
+		|| (bytes == -1 && free_stash(stash)))
 		return (bytes);
 	buffer[bytes] = 0;
 	if (*stash == NULL)
@@ -77,38 +81,46 @@ static long	update_stash(int fd, char *buffer, char **stash)
 		*stash = ft_strdup(buffer);
 		if (*stash == NULL)
 			return (-1);
+		get_nl_pos(stash, nl_pos);
+		return (bytes);
 	}
-	else
-	{
-		new_stash = ft_strjoin(*stash, buffer);
-		if (new_stash == NULL && free_stash(stash))
-			return (-1);
-		*stash = (free(*stash), new_stash);
-	}
+	new_stash = ft_strjoin(*stash, buffer);
+	if (new_stash == NULL && free_stash(stash))
+		return (-1);
+	*stash = (free(*stash), new_stash);
+	get_nl_pos(stash, nl_pos);
 	return (bytes);
 }
 
-// 28/05 - Find a way to get rid of the need to scan TWICE nl_pos
-// 		 - please find the origin of that timeout in francinette --strict
 //		 -  After that, check the utils again
 char	*get_next_line(int fd)
 {
 	static char	*stash;
 	char		*line;
 	char		*buffer;
-	long		bytes;
+	long		read;
+	long		nl_pos;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
 	if (buffer == NULL && free_stash(&stash))
 		return (NULL);
-	bytes = update_stash(fd, buffer, &stash);
-	while (bytes > 0 && get_char_pos('\n', buffer) == -1)
-		bytes = update_stash(fd, buffer, &stash);
+	read = update_stash(fd, buffer, &nl_pos, &stash);
+	while (read > 0 && nl_pos == -1)
+		read = update_stash(fd, buffer, &nl_pos, &stash);
 	free(buffer);
-	if (bytes == -1 || stash == NULL)
+	if (read == -1 || stash == NULL)
 		return (NULL);
-	line = extract_line(&stash);
+	line = extract_line(nl_pos, &stash);
 	return (line);
 }
+
+// Type of lines:
+
+// 		"" (read -> 0; nl_pos = -1)
+// 		"abcdef" (read -> 6; nl_pos = -1)
+
+//		"\n" (read -> 1 ; nl_pos = 0)
+//		"lol\n" (read -> 4 ; nl_pos = 3)
+//		"a\nb" (read -> 3 ; nl_pos = 1)
