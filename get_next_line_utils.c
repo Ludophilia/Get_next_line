@@ -6,15 +6,15 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:04:21 by jegerman          #+#    #+#             */
-/*   Updated: 2025/01/22 17:55:29 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:20:55 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+long	ft_strlen(const char *s)
 {
-	size_t	len;
+	long	len;
 
 	len = 0;
 	while (s[len])
@@ -22,25 +22,9 @@ size_t	ft_strlen(const char *s)
 	return (len);
 }
 
-ssize_t	get_char_pos(const char *s, int c)
-{
-	ssize_t	len;
-	ssize_t	i;
-
-	len = ft_strlen(s);
-	i = 0;
-	while (i < len)
-	{
-		if (s[i] == (char)c)
-			return (i);
-		++i;
-	}
-	return (-1);
-}
-
 char	*ft_strdup(const char *s)
 {
-	size_t	size;
+	long	size;
 	char	*dupl;
 	int		i;
 
@@ -55,12 +39,12 @@ char	*ft_strdup(const char *s)
 	return (dupl);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char	*ft_substr(char const *s, unsigned int start, long len)
 {
 	char	*sub;
-	size_t	slen;
-	size_t	sublen;
-	size_t	i;
+	long	slen;
+	long	sublen;
+	long	i;
 
 	if (s == NULL)
 		return (NULL);
@@ -72,18 +56,15 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	if (sub == NULL)
 		return (NULL);
 	sub[sublen] = 0;
-	i = 0;
-	while (i < sublen)
-	{
+	i = -1;
+	while (++i < sublen)
 		sub[i] = s[start + i];
-		++i;
-	}
 	return (sub);
 }
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	size_t	len[2];
+	long	len[2];
 	char	*s1s2;
 	int		i;
 
@@ -95,16 +76,11 @@ char	*ft_strjoin(char const *s1, char const *s2)
 	if (s1s2 == NULL)
 		return (NULL);
 	s1s2[len[0] + len[1]] = 0;
-	i = 0;
-	while (s1[i])
-	{
+	i = -1;
+	while (s1[++i])
 		s1s2[i] = s1[i];
-		++i;
-	}
-	while (s2[i - len[0]])
-	{
+	--i;
+	while (s2[++i - len[0]])
 		s1s2[i] = s2[i - len[0]];
-		++i;
-	}
 	return (s1s2);
 }

@@ -6,105 +6,111 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 13:51:33 by jegerman          #+#    #+#             */
-/*   Updated: 2024/11/28 13:10:47 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/29 18:33:44 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	swap_stash(char **stash, char *candidate)
+static int	free_stash(char **stash)
 {
-	char	*old_stash;
-
-	old_stash = *stash;
-	if (candidate == NULL)
-	{
-		*stash = NULL;
-		free(old_stash);
-		return (-1);
-	}
-	*stash = candidate;
-	free(old_stash);
-	return (0);
+	if (stash == NULL)
+		return (0);
+	if (*stash)
+		free(*stash);
+	*stash = NULL;
+	return (1);
 }
 
-static ssize_t	update_stash(int fd, char *buffer, char **stash)
+static int	get_nl_pos(char **stash, long *nl_pos)
 {
-	ssize_t		bytesread;
-	char		*tmp_stsh;
-	int			i;
+	long	len;
+	long	i;
 
-	i = -1;
-	while (++i < BUFFER_SIZE + 1)
-		buffer[i] = 0;
-	bytesread = read(fd, buffer, BUFFER_SIZE);
-	if (bytesread == -1 || bytesread == 0)
-		return (bytesread);
+	*nl_pos = -1;
 	if (*stash == NULL)
+		return (1);
+	len = ft_strlen(*stash);
+	i = -1;
+	while (++i < len)
 	{
-		*stash = ft_strdup(buffer);
-		if (*stash == NULL)
-			return (-1);
-		return (bytesread);
+		if ((*stash)[i] == '\n')
+		{
+			*nl_pos = i;
+			break ;
+		}
 	}
-	tmp_stsh = ft_strjoin(*stash, buffer);
-	if (swap_stash(stash, tmp_stsh) == -1)
-		return (-1);
-	return (bytesread);
+	return (1);
 }
 
-static char	*extract_line(char **stash)
+static char	*extract_line(long nl_pos, char **stash)
 {
-	ssize_t	nl_pos;
 	char	*line;
-	char	*tmp_stsh;
+	char	*new_stash;
+	long	stash_len;
 
-	nl_pos = get_char_pos(*stash, '\n');
-	if (nl_pos == -1 || nl_pos + 1 == (ssize_t)ft_strlen(*stash))
+	stash_len = ft_strlen(*stash);
+	if (nl_pos == -1 || (nl_pos + 1) == stash_len)
 	{
 		line = *stash;
 		*stash = NULL;
 		return (line);
 	}
-	line = ft_substr(*stash, 0, nl_pos + 1);
-	if (line == NULL)
-	{
-		free(stash);
-		*stash = NULL;
+	line = ft_substr(*stash, 0, (nl_pos + 1));
+	if (line == NULL && free_stash(stash))
 		return (NULL);
-	}
-	tmp_stsh = ft_substr(*stash, nl_pos + 1, ft_strlen(*stash) \
-		- (nl_pos + 1));
-	if (swap_stash(stash, tmp_stsh) == -1)
+	new_stash = ft_substr(*stash, (nl_pos + 1), (stash_len - (nl_pos + 1)));
+	if (new_stash == NULL && (free(line), free_stash(stash)))
 		return (NULL);
+	*stash = (free(*stash), new_stash);
 	return (line);
+}
+
+static long	update_stash(int fd, char *buffer, long *nl_pos, char **stash)
+{
+	char	*new_stash;
+	long	bytes;
+
+	bytes = read(fd, buffer, BUFFER_SIZE);
+	if ((bytes == 0 && get_nl_pos(stash, nl_pos))
+		|| (bytes == -1 && free_stash(stash)))
+		return (bytes);
+	buffer[bytes] = 0;
+	if (*stash == NULL)
+	{
+		*stash = ft_strdup(buffer);
+		if (*stash == NULL)
+			return (-1);
+		get_nl_pos(stash, nl_pos);
+		return (bytes);
+	}
+	new_stash = ft_strjoin(*stash, buffer);
+	if (new_stash == NULL && free_stash(stash))
+		return (-1);
+	*stash = (free(*stash), new_stash);
+	get_nl_pos(stash, nl_pos);
+	return (bytes);
 }
 
 char	*get_next_line(int fd)
 {
-	static char		*stash;
-	char			*line;
-	ssize_t			bytesread;
-	char			*buffer;
+	static char	*stash;
+	char		*line;
+	char		*buffer;
+	long		read;
+	long		nl_pos;
 
 	if (fd < 0 || BUFFER_SIZE < 1)
 		return (NULL);
 	buffer = malloc((BUFFER_SIZE + 1) * sizeof(char));
-	if (buffer == NULL)
+	if (buffer == NULL && free_stash(&stash))
 		return (NULL);
-	bytesread = update_stash(fd, buffer, &stash);
-	while (bytesread > 0 && get_char_pos(stash, '\n') == -1)
-		bytesread = update_stash(fd, buffer, &stash);
+	read = update_stash(fd, buffer, &nl_pos, &stash);
+	while (read > 0 && nl_pos == -1)
+		read = update_stash(fd, buffer, &nl_pos, &stash);
 	free(buffer);
-	if (bytesread == -1)
-	{
-		if (stash)
-			free(stash);
-		stash = NULL;
+	if (read == -1 || stash == NULL)
 		return (NULL);
-	}
-	if (stash == NULL)
-		return (NULL);
-	line = extract_line(&stash);
+	line = extract_line(nl_pos, &stash);
 	return (line);
 }
