@@ -6,7 +6,7 @@
 /*   By: jegerman <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/24 14:04:27 by jegerman          #+#    #+#             */
-/*   Updated: 2025/05/27 14:19:49 by jegerman         ###   ########.fr       */
+/*   Updated: 2025/05/30 13:05:43 by jegerman         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,10 +21,9 @@
 #  define BUFFER_SIZE 100
 # endif
 
-size_t		ft_strlen(const char *s);
-long		get_char_pos(const char *s, int c);
+long		ft_strlen(const char *s);
 char		*ft_strdup(const char *s);
-char		*ft_substr(char const *s, unsigned int start, size_t len);
+char		*ft_substr(char const *s, unsigned int start, long len);
 char		*ft_strjoin(char const *s1, char const *s2);
 
 char		*get_next_line(int fd);
